@@ -134,13 +134,21 @@ export class SkeletonHostComponent {
       if (g.alignItems) styles['align-items'] = g.alignItems;
 
       if (typeof g.columns === 'number') {
-        styles['--ngx-skeleton-cols-default'] = g.columns.toString();
+        const cStr = g.columns.toString();
+        styles['--ngx-skeleton-cols-default'] = cStr;
+        styles['--ngx-skeleton-cols-sm'] = cStr;
+        styles['--ngx-skeleton-cols-md'] = cStr;
+        styles['--ngx-skeleton-cols-lg'] = cStr;
+        styles['--ngx-skeleton-cols-xl'] = cStr;
+        styles['grid-template-columns'] = `repeat(${g.columns}, 1fr)`;
       } else if (typeof g.columns === 'object' && g.columns !== null) {
         if (g.columns.default) styles['--ngx-skeleton-cols-default'] = g.columns.default.toString();
         if (g.columns.sm) styles['--ngx-skeleton-cols-sm'] = g.columns.sm.toString();
         if (g.columns.md) styles['--ngx-skeleton-cols-md'] = g.columns.md.toString();
         if (g.columns.lg) styles['--ngx-skeleton-cols-lg'] = g.columns.lg.toString();
         if (g.columns.xl) styles['--ngx-skeleton-cols-xl'] = g.columns.xl.toString();
+      } else if (g.minItemWidth) {
+        styles['grid-template-columns'] = `repeat(auto-fit, minmax(min(100%, ${g.minItemWidth}), 1fr))`;
       }
     }
 
