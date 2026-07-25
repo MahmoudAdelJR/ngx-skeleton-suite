@@ -2,8 +2,8 @@
 
 `ngx-skeleton-suite` is an enterprise-grade structural directive suite for Angular applications that seamlessly composes PrimeNG's `p-skeleton` component. It eliminates repeated loading boilerplate, handles Signals, RxJS Observables, and Promises, generates responsive CSS grids, prevents Cumulative Layout Shift (CLS), and provides SSR/hydration safety out of the box.
 
-🌐 **[Live Astro Starlight Documentation Portal](https://user.github.io/ngx-skeleton-suite/)**  
-⚡ **[Live Angular Interactive Demo App & Playground](https://user.github.io/ngx-skeleton-suite/demo/)**  
+🌐 **[Live Astro Starlight Documentation Portal](https://MahmoudAdelJR.github.io/ngx-skeleton-suite/)**  
+⚡ **[Live Angular Interactive Demo App & Playground](https://MahmoudAdelJR.github.io/ngx-skeleton-suite/demo/)**  
 📖 **[Read Full Developer Documentation & API Guide](DOCUMENTATION.md)**
 
 ---
@@ -74,8 +74,8 @@ export class UserModule {}
 ---
 
 ## Documentation & API Index
-- 🌐 **[Live Astro Starlight Documentation Portal](https://user.github.io/ngx-skeleton-suite/)**
-- ⚡ **[Live Interactive Demo App & Playground](https://user.github.io/ngx-skeleton-suite/demo/)**
+- 🌐 **[Live Astro Starlight Documentation Portal](https://MahmoudAdelJR.github.io/ngx-skeleton-suite/)**
+- ⚡ **[Live Interactive Demo App & Playground](https://MahmoudAdelJR.github.io/ngx-skeleton-suite/demo/)**
 - 📖 **[Developer Documentation & API Guide](DOCUMENTATION.md)**
 
 ---

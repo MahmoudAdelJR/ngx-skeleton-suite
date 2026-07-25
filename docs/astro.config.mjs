@@ -2,7 +2,7 @@ import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
 export default defineConfig({
-  site: 'https://user.github.io',
+  site: 'https://MahmoudAdelJR.github.io',
   base: '/ngx-skeleton-suite',
   integrations: [
     starlight({
@@ -10,7 +10,7 @@ export default defineConfig({
       description: 'Zero-CLS Angular Skeleton Loading Library with Composite Presets & CSS Grid Engine.',
       customCss: ['./src/styles/starlight-custom.css'],
       social: [
-        { icon: 'github', label: 'GitHub', href: 'https://github.com/user/ngx-skeleton-suite' },
+        { icon: 'github', label: 'GitHub', href: 'https://github.com/MahmoudAdelJR/ngx-skeleton-suite' },
       ],
       sidebar: [
         {
