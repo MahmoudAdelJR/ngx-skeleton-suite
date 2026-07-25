@@ -1,182 +1,524 @@
-<div class="app-container">
-  <!-- Header Banner -->
-  <header class="hero-section">
-    <div class="hero-badge">Angular 20 + PrimeNG</div>
-    <h1 class="hero-title">
-      <span class="gradient-text">ngx-skeleton</span> Interactive Suite
-    </h1>
-    <p class="hero-subtitle">
-      Eliminate repeated loading templates with a single declarative structural directive. Composes PrimeNG Skeleton primitives with timing controls, composite presets, animations, signals, and responsive CSS grid generation.
-    </p>
+<div class="voicebox-wrapper" [style.--ngx-skeleton-base-color]="customBaseColor" [style.--ngx-skeleton-highlight-color]="customHighlightColor">
+  <!-- VoiceBox Editorial Header Bar -->
+  <header class="vb-header">
+    <div class="vb-header-inner">
+      <div class="vb-brand-section">
+        <span class="vb-issue-tag">VOL. 1.0 // ENTERPRISE LOADING SUITE</span>
+        <h1 class="vb-title">NGX-SKELETON</h1>
+        <p class="vb-tagline">
+          Declarative Angular + PrimeNG Skeleton Directive Suite. Eliminate repeated loading boilerplate, prevent CLS layout shifts, and enforce design system precision.
+        </p>
+      </div>
 
-    <!-- Global Toolbar Actions -->
-    <div class="toolbar">
-      <button class="btn btn-primary" (click)="toggleAllLoading()">
-        <span class="icon">🔄</span> Toggle All States
-      </button>
-
-      <button class="btn btn-secondary" (click)="reloadAsyncData()">
-        <span class="icon">📡</span> Refetch Data Sources
-      </button>
-
-      <button class="btn btn-secondary" (click)="triggerRapidFetch()">
-        <span class="icon">⚡</span> Test Flicker Protection (40ms fetch)
-      </button>
+      <div class="vb-header-actions">
+        <button class="vb-btn vb-btn-primary" (click)="togglePlaygroundLoading()">
+          <span class="icon">🔄</span> TOGGLE STATE: {{ isLoading() ? 'LOADING' : 'READY' }}
+        </button>
+        <button class="vb-btn vb-btn-secondary" (click)="triggerRapidFetch()">
+          <span class="icon">⚡</span> TEST FLICKER (40ms FETCH)
+        </button>
+      </div>
     </div>
+
+    <!-- Editorial Navigation Tabs -->
+    <nav class="vb-nav">
+      <button class="vb-nav-item" [class.active]="activeTab === 'playground'" (click)="activeTab = 'playground'">
+        01. LIVE PLAYGROUND
+      </button>
+      <button class="vb-nav-item" [class.active]="activeTab === 'quickstart'" (click)="activeTab = 'quickstart'">
+        02. QUICKSTART
+      </button>
+      <button class="vb-nav-item" [class.active]="activeTab === 'styling'" (click)="activeTab = 'styling'">
+        03. STYLING & SCSS
+      </button>
+      <button class="vb-nav-item" [class.active]="activeTab === 'presets'" (click)="activeTab = 'presets'">
+        04. PRESETS
+      </button>
+      <button class="vb-nav-item" [class.active]="activeTab === 'grid'" (click)="activeTab = 'grid'">
+        05. RESPONSIVE GRID
+      </button>
+      <button class="vb-nav-item" [class.active]="activeTab === 'async'" (click)="activeTab = 'async'">
+        06. ASYNC & MICROSYNTAX
+      </button>
+      <button class="vb-nav-item" [class.active]="activeTab === 'cls'" (click)="activeTab = 'cls'">
+        07. FLICKER & CLS
+      </button>
+      <button class="vb-nav-item" [class.active]="activeTab === 'api'" (click)="activeTab = 'api'">
+        08. API REFERENCE
+      </button>
+    </nav>
   </header>
 
-  <!-- Interactive Configuration Panel -->
-  <section class="config-panel">
-    <h3 class="panel-title">Interactive Configuration Controls</h3>
-    <div class="controls-grid">
-      <div class="control-group">
-        <label>Composite Preset</label>
-        <select [(ngModel)]="selectedPreset" class="select-input">
-          @for (presetName of presetsList; track presetName) {
-            <option [value]="presetName">{{ presetName }}</option>
-          }
-        </select>
-      </div>
+  <!-- Main View Router Container -->
+  <main class="vb-main-content">
 
-      <div class="control-group">
-        <label>Animation Mode</label>
-        <select [(ngModel)]="selectedAnimation" class="select-input">
-          <option value="wave">Wave (wave)</option>
-          <option value="shimmer">Shimmer (shimmer)</option>
-          <option value="pulse">Pulse (pulse)</option>
-          <option value="prime">PrimeNG Default (prime)</option>
-          <option value="none">None (none)</option>
-        </select>
-      </div>
+    <!-- TAB 1: LIVE PLAYGROUND -->
+    @if (activeTab === 'playground') {
+      <section class="tab-pane">
+        <div class="vb-section-header">
+          <span class="vb-label">INTERACTIVE SANDBOX</span>
+          <h2>LIVE COMPOSER & CODE GENERATOR</h2>
+          <p>Tweak configuration parameters in real time to generate code and watch the skeleton render.</p>
+        </div>
 
-      <div class="control-group">
-        <label>Skeleton Delay: <strong>{{ delayMs }} ms</strong></label>
-        <input type="range" min="0" max="300" step="10" [(ngModel)]="delayMs" />
-      </div>
+        <div class="playground-layout">
+          <!-- Left Column: Interactive Controls -->
+          <div class="controls-column vb-card-elevated">
+            <h3 class="control-section-title">01 // DIRECTIVE CONFIGURATION</h3>
 
-      <div class="control-group">
-        <label>Minimum Duration: <strong>{{ minDurationMs }} ms</strong></label>
-        <input type="range" min="0" max="1000" step="50" [(ngModel)]="minDurationMs" />
-      </div>
-
-      <div class="control-group">
-        <label>Fade-in Duration: <strong>{{ fadeInDuration }} ms</strong></label>
-        <input type="range" min="0" max="500" step="50" [(ngModel)]="fadeInDuration" />
-      </div>
-    </div>
-  </section>
-
-  <!-- Showcase Demos -->
-  <main class="demos-section">
-    <!-- Demo 1: User Profile Card (Signal Source + Live Preset) -->
-    <article class="demo-card">
-      <div class="card-header">
-        <div class="tag">Signal&lt;boolean&gt;</div>
-        <h2>User Profile Card</h2>
-      </div>
-
-      <div class="card-content">
-        <div
-          *skeleton="
-            isSignalLoading;
-            preset: selectedPreset;
-            animation: selectedAnimation;
-            delay: delayMs;
-            minimumDuration: minDurationMs;
-            fadeIn: fadeInDuration
-          "
-        >
-          <div class="user-profile-widget">
-            <div class="avatar-wrapper">
-              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80" alt="Avatar" class="avatar-img" />
+            <div class="vb-field">
+              <label class="vb-label">COMPOSITE PRESET</label>
+              <select [(ngModel)]="selectedPreset" class="vb-select">
+                @for (preset of presetsList; track preset) {
+                  <option [value]="preset">{{ preset }}</option>
+                }
+              </select>
             </div>
-            <div class="profile-info">
-              <h3>Sarah Jenkins</h3>
-              <p class="role">Lead Angular Architect</p>
-              <div class="stats-row">
-                <span><strong>42</strong> Repositories</span>
-                <span><strong>1.2k</strong> Stars</span>
+
+            <div class="vb-field">
+              <label class="vb-label">ANIMATION ENGINE</label>
+              <div class="chip-group">
+                <button class="vb-chip" [class.active]="selectedAnimation === 'wave'" (click)="selectedAnimation = 'wave'">WAVE</button>
+                <button class="vb-chip" [class.active]="selectedAnimation === 'shimmer'" (click)="selectedAnimation = 'shimmer'">SHIMMER</button>
+                <button class="vb-chip" [class.active]="selectedAnimation === 'pulse'" (click)="selectedAnimation = 'pulse'">PULSE</button>
+                <button class="vb-chip" [class.active]="selectedAnimation === 'prime'" (click)="selectedAnimation = 'prime'">PRIME</button>
+                <button class="vb-chip" [class.active]="selectedAnimation === 'none'" (click)="selectedAnimation = 'none'">NONE</button>
+              </div>
+            </div>
+
+            <div class="vb-field">
+              <label class="vb-label">REPEAT COUNT: <strong>{{ customCount }}</strong></label>
+              <input type="range" min="1" max="5" [(ngModel)]="customCount" class="vb-range" />
+            </div>
+
+            <div class="vb-field">
+              <label class="vb-label">DELAY TIMER: <strong>{{ delayMs }} ms</strong></label>
+              <input type="range" min="0" max="300" step="10" [(ngModel)]="delayMs" class="vb-range" />
+            </div>
+
+            <div class="vb-field">
+              <label class="vb-label">MINIMUM VISIBLE DURATION: <strong>{{ minDurationMs }} ms</strong></label>
+              <input type="range" min="0" max="1000" step="50" [(ngModel)]="minDurationMs" class="vb-range" />
+            </div>
+
+            <div class="vb-field">
+              <label class="vb-label">FADE-IN TRANSITION: <strong>{{ fadeInDuration }} ms</strong></label>
+              <input type="range" min="0" max="500" step="50" [(ngModel)]="fadeInDuration" class="vb-range" />
+            </div>
+
+            <h3 class="control-section-title" style="margin-top: 24px;">02 // COLOR THEME OVERRIDES</h3>
+
+            <div class="vb-field-row">
+              <div class="vb-field">
+                <label class="vb-label">BASE COLOR</label>
+                <input type="color" [(ngModel)]="customBaseColor" class="vb-color-picker" />
+              </div>
+
+              <div class="vb-field">
+                <label class="vb-label">HIGHLIGHT COLOR</label>
+                <input type="color" [(ngModel)]="customHighlightColor" class="vb-color-picker" />
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </article>
 
-    <!-- Demo 2: Data Source from Promise -->
-    <article class="demo-card">
-      <div class="card-header">
-        <div class="tag">from Promise&lt;User&gt;</div>
-        <h2>Data Binding via Microsyntax</h2>
-      </div>
-
-      <div class="card-content">
-        <div
-          *skeleton="
-            let user from userPromise;
-            preset: selectedPreset;
-            animation: selectedAnimation;
-            delay: delayMs;
-            minimumDuration: minDurationMs;
-            fadeIn: fadeInDuration
-          "
-        >
-          @if (user) {
-            <div class="user-profile-widget">
-              <div class="avatar-wrapper">
-                <img [src]="user.avatar" [alt]="user.name" class="avatar-img" />
+          <!-- Right Column: Live View & Generated Code -->
+          <div class="preview-column">
+            <!-- Sandbox Canvas -->
+            <div class="sandbox-canvas vb-card">
+              <div class="canvas-header">
+                <span class="vb-chip vb-chip-accent">LIVE COMPONENT CANVAS</span>
+                <button class="vb-btn vb-btn-sm vb-btn-primary" (click)="togglePlaygroundLoading()">
+                  {{ isLoading() ? 'SHOW CONTENT' : 'SHOW SKELETON' }}
+                </button>
               </div>
-              <div class="profile-info">
-                <h3>{{ user.name }}</h3>
-                <p class="role">{{ user.role }}</p>
-                <div class="stats-row">
-                  <span><strong>{{ user.repos }}</strong> Repositories</span>
-                  <span><strong>{{ user.stars }}</strong> Stars</span>
-                </div>
-              </div>
-            </div>
-          }
-        </div>
-      </div>
-    </article>
 
-    <!-- Demo 3: Product Grid (CSS Grid Auto-fit) -->
-    <article class="demo-card full-width">
-      <div class="card-header">
-        <div class="tag">CSS Grid Generation</div>
-        <h2>Product Showcase Responsive Grid</h2>
-      </div>
-
-      <div class="card-content">
-        <div
-          *skeleton="
-            observableLoading$;
-            grid: productGridConfig;
-            animation: selectedAnimation;
-            delay: delayMs;
-            minimumDuration: minDurationMs;
-            fadeIn: fadeInDuration
-          "
-        >
-          <div class="products-grid">
-            @for (product of products; track product.id) {
-              <div class="product-item">
-                <div class="product-img-box">
-                  <img [src]="product.image" [alt]="product.title" />
-                  <span class="category-badge">{{ product.category }}</span>
-                </div>
-                <div class="product-details">
-                  <h4>{{ product.title }}</h4>
-                  <div class="price-row">
-                    <span class="price">${{ product.price }}</span>
-                    <span class="rating">★ {{ product.rating }}</span>
+              <div class="canvas-body">
+                <div
+                  *skeleton="
+                    isLoading;
+                    preset: selectedPreset;
+                    animation: selectedAnimation;
+                    count: customCount;
+                    delay: delayMs;
+                    minimumDuration: minDurationMs;
+                    fadeIn: fadeInDuration;
+                    styleClass: customStyleClass
+                  "
+                >
+                  <!-- Content Component Rendered when Loading is False -->
+                  <div class="user-card-content">
+                    <div class="user-avatar-row">
+                      <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80" alt="Avatar" class="user-avatar" />
+                      <div>
+                        <h3>SARAH JENKINS</h3>
+                        <p>PRINCIPAL FRONTEND ARCHITECT</p>
+                      </div>
+                    </div>
+                    <p class="user-bio">
+                      Leading enterprise Angular architectural transitions with declarative design patterns, reactive RxJS streams, and zero-CLS skeleton placeholders.
+                    </p>
+                    <div class="user-stats">
+                      <span><strong>48</strong> REPOSITORIES</span>
+                      <span><strong>2,450</strong> STARS</span>
+                      <span><strong>99.8%</strong> UPTIME</span>
+                    </div>
                   </div>
                 </div>
               </div>
-            }
+            </div>
+
+            <!-- Dynamic Code Snippet Block -->
+            <div class="code-preview-container">
+              <div class="vb-code-block">
+                <button class="copy-btn" (click)="copySnippet(generatedCode())">{{ copyStatus }}</button>
+                <pre><code>{{ generatedCode() }}</code></pre>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </article>
+      </section>
+    }
+
+    <!-- TAB 2: QUICKSTART -->
+    @if (activeTab === 'quickstart') {
+      <section class="tab-pane">
+        <div class="vb-section-header">
+          <span class="vb-label">INSTALLATION & SETUP</span>
+          <h2>GETTING STARTED WITH NGX-SKELETON</h2>
+          <p>Enterprise structural directive suite for Angular 18+ and PrimeNG.</p>
+        </div>
+
+        <div class="doc-grid">
+          <div class="vb-card">
+            <h3>01. NPM INSTALLATION</h3>
+            <p>Install the package via npm or yarn in your Angular workspace:</p>
+            <div class="vb-code-block" style="margin-top: 12px;">
+              <button class="copy-btn" (click)="copySnippet('npm install ngx-skeleton-suite')">COPY</button>
+              <pre><code>npm install ngx-skeleton-suite</code></pre>
+            </div>
+          </div>
+
+          <div class="vb-card">
+            <h3>02. STANDALONE COMPONENT USAGE (RECOMMENDED)</h3>
+            <p>Import <code>SkeletonDirective</code> directly into your standalone component:</p>
+            <div class="vb-code-block" style="margin-top: 12px;">
+              <pre><code>import &#123; Component, signal &#125; from '&#64;angular/core';
+import &#123; SkeletonDirective &#125; from 'ngx-skeleton-suite';
+
+&#64;Component(&#123;
+  selector: 'app-user-profile',
+  standalone: true,
+  imports: [SkeletonDirective],
+  template: `
+    &lt;div *skeleton="isLoading(); height: '12rem'; animation: 'wave'"&gt;
+      &lt;app-user-card [user]="user()" /&gt;
+    &lt;/div&gt;
+  `
+&#125;)
+export class UserProfileComponent &#123;
+  isLoading = signal(true);
+&#125;</code></pre>
+            </div>
+          </div>
+
+          <div class="vb-card">
+            <h3>03. GLOBAL PROVIDER CONFIGURATION</h3>
+            <p>Configure default animation modes, delay timers, and custom preset registries in <code>app.config.ts</code>:</p>
+            <div class="vb-code-block" style="margin-top: 12px;">
+              <pre><code>import &#123; ApplicationConfig &#125; from '&#64;angular/core';
+import &#123; provideNgxSkeleton &#125; from 'ngx-skeleton-suite';
+
+export const appConfig: ApplicationConfig = &#123;
+  providers: [
+    provideNgxSkeleton(&#123;
+      animation: 'wave',
+      delayMs: 80,
+      minimumDurationMs: 200,
+      fadeInMs: 180,
+      preserveLayout: true,
+    &#125;),
+  ],
+&#125;;</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+    }
+
+    <!-- TAB 3: STYLING & SCSS -->
+    @if (activeTab === 'styling') {
+      <section class="tab-pane">
+        <div class="vb-section-header">
+          <span class="vb-label">DESIGN SYSTEM & CUSTOMIZATION</span>
+          <h2>FULL STYLING & SCSS GUIDE</h2>
+          <p>Learn how to customize background colors, flex alignment, shape dimensions, and SCSS variables.</p>
+        </div>
+
+        <div class="doc-grid">
+          <!-- CSS Variables Box -->
+          <div class="vb-card-elevated">
+            <h3>01 // CSS CUSTOM PROPERTIES (CSS VARIABLES)</h3>
+            <p>Override CSS Custom Properties at the <code>:root</code> level or per light/dark mode theme selector:</p>
+
+            <div class="vb-code-block" style="margin-top: 12px;">
+              <pre><code>/* styles.scss */
+:root &#123;
+  --ngx-skeleton-base-color: #1e293b;
+  --ngx-skeleton-highlight-color: rgba(255, 255, 255, 0.15);
+  --ngx-skeleton-animation-duration: 1.4s;
+  --ngx-skeleton-fade-duration: 180ms;
+&#125;
+
+/* Light Theme Override */
+[data-theme='light'] &#123;
+  --ngx-skeleton-base-color: #e2e8f0;
+  --ngx-skeleton-highlight-color: #ffffff;
+&#125;</code></pre>
+            </div>
+          </div>
+
+          <!-- Direct Input Styling -->
+          <div class="vb-card">
+            <h3>02 // DIRECTIVE STYLING INPUTS</h3>
+            <p>Pass custom dimensions and border radius values directly in template microsyntax:</p>
+
+            <div class="vb-code-block" style="margin-top: 12px;">
+              <pre><code>&lt;div
+  *skeleton="
+    isLoading;
+    width: '100%';
+    height: '180px';
+    shape: 'rectangle';
+    borderRadius: '0px';
+    styleClass: 'custom-skeleton-glow'
+  "
+&gt;
+  &lt;app-banner /&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+          </div>
+
+          <!-- Alignment & Stack Controls -->
+          <div class="vb-card">
+            <h3>03 // FLEXBOX & GRID ALIGNMENT CONTROLS</h3>
+            <p>Control horizontal and vertical skeleton alignment using Stack layout nodes in custom presets:</p>
+
+            <div class="vb-code-block" style="margin-top: 12px;">
+              <pre><code>export const ALIGNED_HEADER_PRESET: SkeletonPreset = &#123;
+  name: 'aligned-header',
+  shapes: [
+    &#123;
+      type: 'stack',
+      direction: 'row',          // Horizontal alignment
+      alignItems: 'center',       // Vertical centering
+      justifyContent: 'space-between',
+      gap: '1.5rem',
+      children: [
+        &#123; type: 'shape', shape: 'circle', size: '3.5rem' &#125;,
+        &#123; type: 'shape', width: '60%', height: '1.25rem' &#125;
+      ]
+    &#125;
+  ]
+&#125;;</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+    }
+
+    <!-- TAB 4: COMPOSITE PRESETS -->
+    @if (activeTab === 'presets') {
+      <section class="tab-pane">
+        <div class="vb-section-header">
+          <span class="vb-label">SHAPE PRESET CATALOG</span>
+          <h2>PRE-BUILT COMPOSITE PRESETS</h2>
+          <p>Select any of the 7 built-in presets to inspect live visual outputs and shape structure tree definitions.</p>
+        </div>
+
+        <div class="preset-selector-bar">
+          @for (preset of presetsList; track preset) {
+            <button
+              class="vb-chip"
+              [class.active]="selectedPreset === preset"
+              (click)="selectedPreset = preset"
+            >
+              {{ preset }}
+            </button>
+          }
+        </div>
+
+        <div class="preset-demo-container vb-card">
+          <div class="canvas-header">
+            <span class="vb-chip vb-chip-accent">ACTIVE PRESET: {{ selectedPreset }}</span>
+            <button class="vb-btn vb-btn-sm vb-btn-primary" (click)="togglePlaygroundLoading()">
+              TOGGLE LOADING ({{ isLoading() ? 'ON' : 'OFF' }})
+            </button>
+          </div>
+
+          <div class="canvas-body" style="min-height: 200px;">
+            <div *skeleton="isLoading; preset: selectedPreset; animation: 'wave'">
+              <div class="preset-sample-content">
+                <h3>PRESET TARGET RENDERED CONTENT</h3>
+                <p>Real content replaces skeleton automatically after load completion.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    }
+
+    <!-- TAB 5: RESPONSIVE GRID -->
+    @if (activeTab === 'grid') {
+      <section class="tab-pane">
+        <div class="vb-section-header">
+          <span class="vb-label">LAYOUT GENERATION</span>
+          <h2>RESPONSIVE CSS GRID GENERATOR</h2>
+          <p>Generate responsive multi-column skeleton card placeholders without duplicating HTML markup.</p>
+        </div>
+
+        <div class="preset-selector-bar">
+          <button class="vb-chip" [class.active]="gridColsMode === 'auto-fit'" (click)="gridColsMode = 'auto-fit'">AUTO-FIT (MIN 16REM)</button>
+          <button class="vb-chip" [class.active]="gridColsMode === 'cols-2'" (click)="gridColsMode = 'cols-2'">2 COLUMNS</button>
+          <button class="vb-chip" [class.active]="gridColsMode === 'cols-3'" (click)="gridColsMode = 'cols-3'">3 COLUMNS</button>
+          <button class="vb-chip" [class.active]="gridColsMode === 'cols-4'" (click)="gridColsMode = 'cols-4'">4 COLUMNS</button>
+        </div>
+
+        <div class="grid-demo-canvas vb-card">
+          <div
+            *skeleton="
+              isLoading;
+              grid: activeGridConfig();
+              animation: 'wave'
+            "
+          >
+            <div class="products-grid">
+              @for (item of products; track item.id) {
+                <div class="product-card vb-card">
+                  <img [src]="item.image" [alt]="item.title" class="product-img" />
+                  <h4>{{ item.title }}</h4>
+                  <p class="price">${{ item.price }}</p>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </section>
+    }
+
+    <!-- TAB 6: ASYNC & MICROSYNTAX -->
+    @if (activeTab === 'async') {
+      <section class="tab-pane">
+        <div class="vb-section-header">
+          <span class="vb-label">DATA BINDING MICROSYNTAX</span>
+          <h2>UNIVERSAL ASYNC DATA SOURCES</h2>
+          <p>Bind directly to Promises, Observables, Signals, or raw data streams using <code>*skeleton="let data from data$"</code>.</p>
+        </div>
+
+        <div class="doc-grid">
+          <div class="vb-card">
+            <h3>PROMISE DATA BINDING</h3>
+            <p>Automatically renders skeleton while pending and unwraps value upon resolution:</p>
+            <div
+              *skeleton="
+                let user from userPromise;
+                preset: 'profile-card';
+                animation: 'wave'
+              "
+              style="margin-top: 16px;"
+            >
+              @if (user) {
+                <div class="vb-pullquote">
+                  RESOLVED USER: <strong>{{ user.name }}</strong> ({{ user.role }})
+                </div>
+              }
+            </div>
+            <button class="vb-btn vb-btn-secondary vb-btn-sm" (click)="reloadAsyncSources()" style="margin-top: 16px;">
+              REFETCH PROMISE SOURCE
+            </button>
+          </div>
+        </div>
+      </section>
+    }
+
+    <!-- TAB 7: FLICKER & CLS -->
+    @if (activeTab === 'cls') {
+      <section class="tab-pane">
+        <div class="vb-section-header">
+          <span class="vb-label">PERFORMANCE & LAYOUT STABILITY</span>
+          <h2>FLICKER PROTECTION & CLS PREVENTION</h2>
+          <p>Eliminate instantaneous UI flashes and layout collapse during network refetches.</p>
+        </div>
+
+        <div class="doc-grid">
+          <div class="vb-card">
+            <h3>01. FLICKER PROTECTION (DELAY TIMER)</h3>
+            <p>If an API response resolves in under 80ms, no skeleton is shown at all—preventing irritating UI flashes.</p>
+            <button class="vb-btn vb-btn-primary" (click)="triggerRapidFetch()" style="margin-top: 16px;">
+              SIMULATE 40MS RAPID FETCH
+            </button>
+          </div>
+
+          <div class="vb-card">
+            <h3>02. CLS PREVENTION (LAYOUT RESERVATION)</h3>
+            <p>Caches container dimensions via <code>ResizeObserver</code> so layout height is preserved when reloading data.</p>
+            <div class="vb-pullquote" style="margin-top: 16px;">
+              PRESERVES CONTAINER BOUNDS AUTOMATICALLY WHEN RELOADING
+            </div>
+          </div>
+        </div>
+      </section>
+    }
+
+    <!-- TAB 8: API REFERENCE -->
+    @if (activeTab === 'api') {
+      <section class="tab-pane">
+        <div class="vb-section-header">
+          <span class="vb-label">TECHNICAL REFERENCE</span>
+          <h2>DIRECTIVE API REFERENCE</h2>
+          <p>Complete property specification for <code>SkeletonDirective</code>.</p>
+        </div>
+
+        <div class="api-filter-bar">
+          <input
+            type="text"
+            [(ngModel)]="apiSearchQuery"
+            placeholder="SEARCH API PROPERTIES (e.g. animation, delay, grid, preset)..."
+            class="vb-input"
+          />
+        </div>
+
+        <div class="api-table-wrapper vb-card">
+          <table class="vb-table">
+            <thead>
+              <tr>
+                <th>INPUT PROPERTY</th>
+                <th>TYPE</th>
+                <th>DEFAULT</th>
+                <th>DESCRIPTION</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (prop of filteredApiProps(); track prop.name) {
+                <tr>
+                  <td><code>{{ prop.name }}</code></td>
+                  <td><code>{{ prop.type }}</code></td>
+                  <td><code>{{ prop.default }}</code></td>
+                  <td>{{ prop.description }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+    }
+
   </main>
+
+  <!-- Editorial Footer -->
+  <footer class="vb-footer">
+    <div class="vb-footer-inner">
+      <span class="vb-issue-tag">NGX-SKELETON SUITE // MIT LICENSE</span>
+      <p>BUILT FOR ANGULAR CORE >= 18.0.0 & PRIMENG >= 17.0.0</p>
+    </div>
+  </footer>
 </div>
