@@ -1,0 +1,182 @@
+<div class="app-container">
+  <!-- Header Banner -->
+  <header class="hero-section">
+    <div class="hero-badge">Angular 20 + PrimeNG</div>
+    <h1 class="hero-title">
+      <span class="gradient-text">ngx-skeleton</span> Interactive Suite
+    </h1>
+    <p class="hero-subtitle">
+      Eliminate repeated loading templates with a single declarative structural directive. Composes PrimeNG Skeleton primitives with timing controls, composite presets, animations, signals, and responsive CSS grid generation.
+    </p>
+
+    <!-- Global Toolbar Actions -->
+    <div class="toolbar">
+      <button class="btn btn-primary" (click)="toggleAllLoading()">
+        <span class="icon">🔄</span> Toggle All States
+      </button>
+
+      <button class="btn btn-secondary" (click)="reloadAsyncData()">
+        <span class="icon">📡</span> Refetch Data Sources
+      </button>
+
+      <button class="btn btn-secondary" (click)="triggerRapidFetch()">
+        <span class="icon">⚡</span> Test Flicker Protection (40ms fetch)
+      </button>
+    </div>
+  </header>
+
+  <!-- Interactive Configuration Panel -->
+  <section class="config-panel">
+    <h3 class="panel-title">Interactive Configuration Controls</h3>
+    <div class="controls-grid">
+      <div class="control-group">
+        <label>Composite Preset</label>
+        <select [(ngModel)]="selectedPreset" class="select-input">
+          @for (presetName of presetsList; track presetName) {
+            <option [value]="presetName">{{ presetName }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="control-group">
+        <label>Animation Mode</label>
+        <select [(ngModel)]="selectedAnimation" class="select-input">
+          <option value="wave">Wave (wave)</option>
+          <option value="shimmer">Shimmer (shimmer)</option>
+          <option value="pulse">Pulse (pulse)</option>
+          <option value="prime">PrimeNG Default (prime)</option>
+          <option value="none">None (none)</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <label>Skeleton Delay: <strong>{{ delayMs }} ms</strong></label>
+        <input type="range" min="0" max="300" step="10" [(ngModel)]="delayMs" />
+      </div>
+
+      <div class="control-group">
+        <label>Minimum Duration: <strong>{{ minDurationMs }} ms</strong></label>
+        <input type="range" min="0" max="1000" step="50" [(ngModel)]="minDurationMs" />
+      </div>
+
+      <div class="control-group">
+        <label>Fade-in Duration: <strong>{{ fadeInDuration }} ms</strong></label>
+        <input type="range" min="0" max="500" step="50" [(ngModel)]="fadeInDuration" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Showcase Demos -->
+  <main class="demos-section">
+    <!-- Demo 1: User Profile Card (Signal Source + Live Preset) -->
+    <article class="demo-card">
+      <div class="card-header">
+        <div class="tag">Signal&lt;boolean&gt;</div>
+        <h2>User Profile Card</h2>
+      </div>
+
+      <div class="card-content">
+        <div
+          *skeleton="
+            isSignalLoading;
+            preset: selectedPreset;
+            animation: selectedAnimation;
+            delay: delayMs;
+            minimumDuration: minDurationMs;
+            fadeIn: fadeInDuration
+          "
+        >
+          <div class="user-profile-widget">
+            <div class="avatar-wrapper">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80" alt="Avatar" class="avatar-img" />
+            </div>
+            <div class="profile-info">
+              <h3>Sarah Jenkins</h3>
+              <p class="role">Lead Angular Architect</p>
+              <div class="stats-row">
+                <span><strong>42</strong> Repositories</span>
+                <span><strong>1.2k</strong> Stars</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Demo 2: Data Source from Promise -->
+    <article class="demo-card">
+      <div class="card-header">
+        <div class="tag">from Promise&lt;User&gt;</div>
+        <h2>Data Binding via Microsyntax</h2>
+      </div>
+
+      <div class="card-content">
+        <div
+          *skeleton="
+            let user from userPromise;
+            preset: selectedPreset;
+            animation: selectedAnimation;
+            delay: delayMs;
+            minimumDuration: minDurationMs;
+            fadeIn: fadeInDuration
+          "
+        >
+          @if (user) {
+            <div class="user-profile-widget">
+              <div class="avatar-wrapper">
+                <img [src]="user.avatar" [alt]="user.name" class="avatar-img" />
+              </div>
+              <div class="profile-info">
+                <h3>{{ user.name }}</h3>
+                <p class="role">{{ user.role }}</p>
+                <div class="stats-row">
+                  <span><strong>{{ user.repos }}</strong> Repositories</span>
+                  <span><strong>{{ user.stars }}</strong> Stars</span>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </article>
+
+    <!-- Demo 3: Product Grid (CSS Grid Auto-fit) -->
+    <article class="demo-card full-width">
+      <div class="card-header">
+        <div class="tag">CSS Grid Generation</div>
+        <h2>Product Showcase Responsive Grid</h2>
+      </div>
+
+      <div class="card-content">
+        <div
+          *skeleton="
+            observableLoading$;
+            grid: productGridConfig;
+            animation: selectedAnimation;
+            delay: delayMs;
+            minimumDuration: minDurationMs;
+            fadeIn: fadeInDuration
+          "
+        >
+          <div class="products-grid">
+            @for (product of products; track product.id) {
+              <div class="product-item">
+                <div class="product-img-box">
+                  <img [src]="product.image" [alt]="product.title" />
+                  <span class="category-badge">{{ product.category }}</span>
+                </div>
+                <div class="product-details">
+                  <h4>{{ product.title }}</h4>
+                  <div class="price-row">
+                    <span class="price">${{ product.price }}</span>
+                    <span class="rating">★ {{ product.rating }}</span>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </article>
+  </main>
+</div>

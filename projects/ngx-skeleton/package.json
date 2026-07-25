@@ -1,0 +1,28 @@
+{
+  "name": "ngx-skeleton-suite",
+  "version": "1.0.0",
+  "description": "Enterprise-grade declarative structural directive for Angular & PrimeNG skeleton placeholders",
+  "keywords": [
+    "angular",
+    "ngx-skeleton",
+    "ngx-skeleton-suite",
+    "primeng",
+    "skeleton",
+    "directive",
+    "loading",
+    "cls-prevention",
+    "signals",
+    "rxjs"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "@angular/common": ">=18.0.0 <23.0.0",
+    "@angular/core": ">=18.0.0 <23.0.0",
+    "primeng": ">=17.0.0 <23.0.0",
+    "rxjs": ">=7.4.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false
+}
