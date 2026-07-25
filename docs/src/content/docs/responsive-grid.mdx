@@ -1,0 +1,74 @@
+---
+title: Responsive CSS Grid Engine
+description: Generate dynamic multi-column CSS grid skeletons without duplicating markup.
+---
+
+The CSS Grid Engine allows you to create responsive skeleton grids directly via the `grid` directive input without needing `@for` loops or dummy arrays.
+
+## 1. Auto-Fit Mode
+
+In `auto-fit` mode, specify `minItemWidth`. The grid automatically calculates how many columns fit based on container width:
+
+```typescript
+import { Component } from '@angular/core';
+import { SkeletonDirective, SkeletonGridConfig } from 'ngx-skeleton-suite';
+
+@Component({
+  standalone: true,
+  imports: [SkeletonDirective],
+  template: `
+    <div *skeleton="isLoading; grid: gridConfig; animation: 'wave'">
+      <div class="products-grid">
+        @for (item of products; track item.id) {
+          <div class="product-card">...</div>
+        }
+      </div>
+    </div>
+  `
+})
+export class ProductGridComponent {
+  isLoading = true;
+
+  readonly gridConfig: SkeletonGridConfig = {
+    count: 6,
+    minItemWidth: '16rem', // Auto-fits columns (min 256px per item)
+    gap: '1.5rem',
+    itemPreset: 'card'
+  };
+}
+```
+
+---
+
+## 2. Fixed Column Count
+
+Specify an exact number of columns (`columns: 1`, `2`, `3`, `4`):
+
+```typescript
+readonly gridConfig: SkeletonGridConfig = {
+  count: 6,
+  columns: 3, // Forces exactly 3 equal-width columns
+  gap: '1.5rem',
+  itemPreset: 'card'
+};
+```
+
+---
+
+## 3. Responsive Breakpoint Objects
+
+Pass a responsive columns object mapping to CSS media queries (`default`, `sm`, `md`, `lg`, `xl`):
+
+```typescript
+readonly gridConfig: SkeletonGridConfig = {
+  count: 6,
+  columns: {
+    default: 1, // Mobile screens (< 576px)
+    sm: 2,      // Small tablets (>= 576px)
+    md: 3,      // Tablets (>= 768px)
+    lg: 4,      // Desktops (>= 992px)
+  },
+  gap: '1.5rem',
+  itemPreset: 'card'
+};
+```

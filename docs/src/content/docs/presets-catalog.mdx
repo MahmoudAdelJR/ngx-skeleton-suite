@@ -1,0 +1,60 @@
+---
+title: Built-in Presets Catalog
+description: Complete reference for all 7 composite built-in skeleton presets in ngx-skeleton-suite.
+---
+
+`ngx-skeleton-suite` includes 7 pre-designed composite presets for immediate use without needing to compose shapes manually.
+
+## Preset Overview Table
+
+| Preset Name | Description | Key Component Shapes |
+|---|---|---|
+| `card` | Full card skeleton placeholder | Banner image + Title line + 2 Body lines |
+| `profile-card` | User profile card skeleton | Circular avatar + Title + Subtitle + Bio line |
+| `avatar` | Circular user avatar placeholder | 3rem circular shape |
+| `list-item` | Row list item with avatar & text | Circle avatar + Title line + Subtitle line |
+| `paragraph` | Multi-line text block placeholder | 3 text lines with varying width (100%, 92%, 60%) |
+| `table-row` | Data table row skeleton placeholder | 4 horizontal columns (20%, 40%, 25%, 15%) |
+| `image-card` | Media card placeholder | Large 12rem image box + Title line |
+
+---
+
+## Code Examples
+
+### 1. Card Preset
+
+```html
+<div *skeleton="isLoading; preset: 'card'">
+  <div class="card">
+    <img src="/product.jpg" alt="Product" />
+    <h3>Wireless Headphones</h3>
+    <p>$299.99</p>
+  </div>
+</div>
+```
+
+### 2. Profile Card Preset
+
+```html
+<div *skeleton="isLoading; preset: 'profile-card'">
+  <div class="profile-card">
+    <img src="/avatar.jpg" class="avatar" />
+    <h2>Sarah Jenkins</h2>
+    <p>Principal Architect</p>
+  </div>
+</div>
+```
+
+### 3. List Item Preset
+
+```html
+<div *skeleton="isLoading; preset: 'list-item'; count: 4">
+  <div class="list-item">
+    <img src="/user.jpg" class="circle-avatar" />
+    <div class="info">
+      <h4>Item Title</h4>
+      <p>Subtext detail</p>
+    </div>
+  </div>
+</div>
+```

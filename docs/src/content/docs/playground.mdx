@@ -1,0 +1,35 @@
+---
+title: Interactive Code Generator
+description: Interactive playground to customize directive parameters and copy template & import code snippets.
+---
+
+Customize inputs below to generate matching Angular HTML template and TypeScript import code.
+
+```html
+<div
+  *skeleton="
+    isLoading;
+    preset: 'profile-card';
+    animation: 'wave';
+    count: 1;
+    delay: 80;
+    minimumDuration: 200;
+  "
+>
+  <app-user-profile />
+</div>
+```
+
+```typescript
+import { Component } from '@angular/core';
+import { SkeletonDirective } from 'ngx-skeleton-suite';
+
+@Component({
+  standalone: true,
+  imports: [SkeletonDirective],
+  templateUrl: './user-profile.component.html',
+})
+export class UserProfileComponent {
+  isLoading = true;
+}
+```

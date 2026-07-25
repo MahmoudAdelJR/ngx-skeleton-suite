@@ -1,0 +1,41 @@
+---
+title: Flicker & CLS Protection
+description: Prevent Cumulative Layout Shift (CLS) and visual flickering with delay and layout preservation.
+---
+
+## 1. Zero-CLS Layout Preservation (`preserveLayout`)
+
+When `preserveLayout: true` is enabled, `ngx-skeleton-suite` automatically measures the DOM dimensions of the real component content before loading and reserves those exact pixel dimensions for the skeleton placeholder.
+
+```html
+<div *skeleton="isLoading; preserveLayout: true; layoutKey: 'user-profile-card'">
+  <div class="user-profile-card">
+    <!-- Real content -->
+  </div>
+</div>
+```
+
+---
+
+## 2. Rapid Request Flicker Protection (`delay`)
+
+If an API response completes in less than 80ms, rendering a skeleton placeholder creates an annoying visual flicker. The `delay` input delays skeleton display by a customizable threshold (default `80ms`):
+
+```html
+<!-- Skeleton will NOT show if isLoading becomes false within 100ms -->
+<div *skeleton="isLoading; delay: 100; preset: 'card'">
+  <div class="card">...</div>
+</div>
+```
+
+---
+
+## 3. Minimum Display Duration (`minimumDuration`)
+
+To prevent skeleton placeholders from disappearing instantaneously after flashing on screen for 10ms, `minimumDuration` guarantees the skeleton remains visible for a minimum duration once displayed (default `200ms`):
+
+```html
+<div *skeleton="isLoading; minimumDuration: 300; preset: 'card'">
+  <div class="card">...</div>
+</div>
+```

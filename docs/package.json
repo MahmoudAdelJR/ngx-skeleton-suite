@@ -1,0 +1,16 @@
+{
+  "name": "ngx-skeleton-starlight-docs",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build --outDir ../dist/docs",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^4.0.0",
+    "@astrojs/starlight": "^0.32.0",
+    "astro": "^5.0.0"
+  }
+}

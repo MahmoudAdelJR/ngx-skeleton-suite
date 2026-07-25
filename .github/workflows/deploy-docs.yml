@@ -1,0 +1,65 @@
+name: Deploy Documentation & Interactive Demo to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Build Library Package
+        run: npx ng build ngx-skeleton
+
+      - name: Build Angular Demo App (Interactive Playground)
+        run: npx ng build demo-app --base-href /ngx-skeleton-suite/demo/ --output-path dist/demo-app
+
+      - name: Build Astro Starlight Documentation Portal
+        run: npx astro build --root docs --outDir ../dist/starlight-docs
+
+      - name: Assemble Unified GitHub Pages Site
+        run: |
+          mkdir -p public-site
+          cp -r dist/starlight-docs/* public-site/
+          mkdir -p public-site/demo
+          cp -r dist/demo-app/browser/* public-site/demo/ || cp -r dist/demo-app/* public-site/demo/
+          touch public-site/.nojekyll
+
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload GitHub Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public-site/
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

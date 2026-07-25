@@ -1,0 +1,62 @@
+---
+title: NGX-SKELETON SUITE
+description: Zero-CLS Angular Skeleton Loading Library with Composite Presets & CSS Grid Engine.
+template: splash
+hero:
+  tagline: High-performance, zero-CLS skeleton placeholder directive with composite presets, dynamic responsive CSS grids, and RxJS/Signal stream integration.
+  image:
+    html: '<div style="font-size: 5rem; text-align: center;">⚡</div>'
+  actions:
+    - text: Get Started
+      link: /getting-started/
+      icon: right-arrow
+      variant: primary
+    - text: View API Reference
+      link: /api-reference/
+      icon: external
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## Key Features
+
+<CardGrid stack>
+  <Card title="Zero-CLS Layout Preservation" icon="star">
+    Automatically measures real component bounding boxes before loading and reserves height/width, preventing Cumulative Layout Shift (CLS).
+  </Card>
+  <Card title="7 Built-in Composite Presets" icon="puzzle">
+    Instant complex shapes: `card`, `profile-card`, `avatar`, `list-item`, `paragraph`, `table-row`, and `image-card`.
+  </Card>
+  <Card title="Dynamic CSS Grid Engine" icon="grid">
+    Generate multi-column skeleton grids on the fly with `auto-fit` minimum widths or responsive breakpoint objects (`{ sm: 2, md: 4, lg: 6 }`).
+  </Card>
+  <Card title="Universal Async & Signal Binding" icon="rocket">
+    Seamlessly unwrap Promises, RxJS Observables, and Angular Signals directly via directive microsyntax `*skeleton="let user from user$"`.
+  </Card>
+</CardGrid>
+
+---
+
+## Quick Installation
+
+```bash
+npm install ngx-skeleton-suite
+```
+
+```typescript
+import { Component } from '@angular/core';
+import { SkeletonDirective } from 'ngx-skeleton-suite';
+
+@Component({
+  standalone: true,
+  imports: [SkeletonDirective],
+  template: `
+    <div *skeleton="isLoading; preset: 'card'">
+      <app-user-card />
+    </div>
+  `
+})
+export class UserComponent {
+  isLoading = true;
+}
+```

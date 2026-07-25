@@ -1,0 +1,27 @@
+---
+title: Complete API Reference
+description: Authoritative reference table listing all 18 input properties for SkeletonDirective.
+---
+
+## SkeletonDirective Inputs (`*skeleton`)
+
+| Directive Input Property | Type | Default Value | Description |
+|---|---|---|---|
+| `skeleton` / `loadingSource` | `boolean \| Observable<boolean> \| Signal<boolean>` | `true` | Controls skeleton visibility state |
+| `skeletonFrom` | `Observable<T> \| Promise<T> \| Signal<T>` | `undefined` | Async data source stream |
+| `skeletonReadyWhen` | `'non-nullish-emission' \| ((val: T) => boolean)` | `'non-nullish-emission'` | Strategy determining when data is considered ready |
+| `skeletonPreset` | `string \| SkeletonPreset` | `undefined` | Composite built-in preset (`card`, `profile-card`, `avatar`, etc.) |
+| `skeletonGrid` | `SkeletonGridConfig` | `undefined` | Dynamic CSS Grid configuration object |
+| `skeletonAnimation` | `'prime' \| 'pulse' \| 'shimmer' \| 'wave' \| 'none'` | `'prime'` | Animation engine effect |
+| `skeletonWidth` | `string` | `'100%'` | Width of single skeleton placeholder shape |
+| `skeletonHeight` | `string` | `'1rem'` | Height of single skeleton placeholder shape |
+| `skeletonShape` | `'rectangle' \| 'circle'` | `'rectangle'` | Shape of single skeleton placeholder |
+| `skeletonSize` | `string` | `undefined` | Square / circle size dimension |
+| `skeletonBorderRadius` | `string` | `undefined` | Border radius inline override |
+| `skeletonCount` | `number` | `1` | Repeat count of skeleton shapes or presets |
+| `skeletonDelay` | `number` | `80` | Delay in milliseconds before showing skeleton (flicker protection) |
+| `skeletonMinimumDuration` | `number` | `200` | Minimum display duration in milliseconds |
+| `skeletonFadeIn` | `boolean \| number` | `180` | Fade-in transition duration in milliseconds |
+| `skeletonPreserveLayout` | `boolean` | `false` | Enables zero-CLS dimension preservation |
+| `skeletonLayoutKey` | `string` | `undefined` | Custom cache key for layout dimension preservation |
+| `skeletonStyleClass` | `string` | `''` | Custom CSS class applied to skeleton container |

@@ -1,0 +1,69 @@
+---
+title: Universal Async & Signal Sources
+description: Direct binding to Promises, RxJS Observables, and Angular Signals via microsyntax.
+---
+
+`ngx-skeleton-suite` automatically detects and unwraps Promises, RxJS Observables, and Angular Signals directly inside the template.
+
+## 1. RxJS Observables (`*skeleton="let user from user$"`)
+
+```typescript
+import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { SkeletonDirective } from 'ngx-skeleton-suite';
+
+@Component({
+  standalone: true,
+  imports: [SkeletonDirective],
+  template: `
+    <div *skeleton="let user from user$; preset: 'profile-card'">
+      <div class="user-card">
+        <h2>{{ user.name }}</h2>
+        <p>{{ user.role }}</p>
+      </div>
+    </div>
+  `
+})
+export class UserProfileComponent {
+  user$: Observable<UserData> = this.userService.getUser();
+}
+```
+
+---
+
+## 2. Promises (`*skeleton="let data from dataPromise"`)
+
+```typescript
+@Component({
+  standalone: true,
+  imports: [SkeletonDirective],
+  template: `
+    <div *skeleton="let data from fetchPromise; preset: 'card'">
+      <div class="card">{{ data.title }}</div>
+    </div>
+  `
+})
+export class PromiseDemoComponent {
+  fetchPromise = fetch('/api/data').then(res => res.json());
+}
+```
+
+---
+
+## 3. Angular Signals (`*skeleton="isLoading()"`)
+
+```typescript
+@Component({
+  standalone: true,
+  imports: [SkeletonDirective],
+  template: `
+    <div *skeleton="isLoading(); preset: 'paragraph'">
+      <p>{{ articleText() }}</p>
+    </div>
+  `
+})
+export class SignalDemoComponent {
+  readonly isLoading = signal(true);
+  readonly articleText = signal('Loaded content...');
+}
+```

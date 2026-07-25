@@ -1,0 +1,345 @@
+/* VoiceBox Editorial Theme — Master CSS Overrides for Astro Starlight */
+
+/* ==========================================================================
+   01. DESIGN TOKENS & COLOR PALETTE
+   ========================================================================== */
+
+/* Dark Theme (Default) */
+:root, :root[data-theme='dark'] {
+  --sl-color-accent-low: #3f1010;
+  --sl-color-accent: #ef4444;
+  --sl-color-accent-high: #fca5a5;
+
+  --sl-color-white: #ffffff;
+  --sl-color-gray-1: #f3f4f6;
+  --sl-color-gray-2: #e5e7eb;
+  --sl-color-gray-3: #9ca3af;
+  --sl-color-gray-4: #4b5563;
+  --sl-color-gray-5: #262626;
+  --sl-color-gray-6: #171717;
+  --sl-color-black: #0a0a0a;
+
+  --sl-color-bg: #0a0a0a;
+  --sl-color-bg-nav: #0a0a0a;
+  --sl-color-bg-sidebar: #0d0d0d;
+  --sl-color-bg-inline-code: #171717;
+  --sl-color-hairline: #262626;
+  --sl-color-border: #262626;
+
+  --sl-font-family: 'Work Sans', system-ui, -apple-system, sans-serif;
+  --sl-font-display: 'Archivo Black', system-ui, sans-serif;
+  --sl-font-mono: 'Space Mono', monospace;
+}
+
+/* Light Theme Overrides */
+:root[data-theme='light'] {
+  --sl-color-accent-low: #fee2e2;
+  --sl-color-accent: #ef4444;
+  --sl-color-accent-high: #b91c1c;
+
+  --sl-color-white: #0a0a0a;
+  --sl-color-gray-1: #1f2937;
+  --sl-color-gray-2: #374151;
+  --sl-color-gray-3: #6b7280;
+  --sl-color-gray-4: #9ca3af;
+  --sl-color-gray-5: #e5e7eb;
+  --sl-color-gray-6: #f8fafc;
+  --sl-color-black: #ffffff;
+
+  --sl-color-bg: #ffffff;
+  --sl-color-bg-nav: #ffffff;
+  --sl-color-bg-sidebar: #f8fafc;
+  --sl-color-bg-inline-code: #f1f5f9;
+  --sl-color-hairline: #e2e8f0;
+  --sl-color-border: #e2e8f0;
+}
+
+/* Enforce Strict 0px Border Radius Across All Components */
+*, *::before, *::after {
+  border-radius: 0px !important;
+}
+
+/* ==========================================================================
+   02. TYPOGRAPHY & HEADINGS
+   ========================================================================== */
+
+body {
+  font-family: var(--sl-font-family);
+  background-color: var(--sl-color-bg);
+  color: var(--sl-color-gray-1);
+}
+
+h1, h2, h3, h4, h5, h6, .site-title {
+  font-family: var(--sl-font-display) !important;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  color: var(--sl-color-white) !important;
+}
+
+/* Red Accent Underline on H1 & H2 in Main Content */
+.content-panel h1, .content-panel h2 {
+  border-bottom: 3px solid #ef4444 !important;
+  padding-bottom: 0.4em;
+  margin-bottom: 1.2rem;
+}
+
+/* Links */
+a {
+  color: #ef4444;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: #fca5a5;
+}
+
+:root[data-theme='light'] a:hover {
+  color: #b91c1c;
+}
+
+/* Inline Code */
+:not(pre) > code {
+  font-family: var(--sl-font-mono);
+  background-color: var(--sl-color-bg-inline-code) !important;
+  color: #ef4444 !important;
+  border: 1px solid var(--sl-color-hairline) !important;
+  padding: 2px 6px !important;
+  font-size: 0.875em !important;
+}
+
+/* ==========================================================================
+   03. SIDEBAR & NAVIGATION
+   ========================================================================== */
+
+header.header {
+  border-bottom: 2px solid var(--sl-color-accent) !important;
+  background-color: var(--sl-color-bg-nav) !important;
+}
+
+nav.sidebar {
+  border-right: 2px solid var(--sl-color-hairline) !important;
+  background-color: var(--sl-color-bg-sidebar) !important;
+}
+
+/* Sidebar Links */
+.sidebar-content a {
+  font-family: var(--sl-font-family);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--sl-color-gray-2) !important;
+  padding: 8px 12px;
+  border-left: 3px solid transparent;
+
+  &:hover {
+    color: var(--sl-color-white) !important;
+    background-color: var(--sl-color-gray-5) !important;
+  }
+
+  &[aria-current='page'] {
+    color: var(--sl-color-white) !important;
+    background-color: var(--sl-color-gray-5) !important;
+    border-left: 3px solid #ef4444 !important;
+    font-weight: 700;
+  }
+}
+
+/* ==========================================================================
+   04. CARDS & HERO Splash Components
+   ========================================================================== */
+
+.card {
+  background-color: var(--sl-color-gray-6) !important;
+  border: 2px solid var(--sl-color-hairline) !important;
+  padding: 24px !important;
+
+  .title {
+    font-family: var(--sl-font-display) !important;
+    font-size: 1.15rem !important;
+    color: var(--sl-color-white) !important;
+    margin-bottom: 8px !important;
+  }
+
+  .description, p {
+    color: var(--sl-color-gray-2) !important;
+    font-size: 0.95rem !important;
+    line-height: 1.6 !important;
+  }
+}
+
+:root[data-theme='dark'] .card {
+  border-color: #262626 !important;
+  background-color: #121212 !important;
+
+  &:hover {
+    border-color: #ef4444 !important;
+  }
+}
+
+/* Hero Action Buttons */
+.hero .actions a.action.primary {
+  background-color: #ef4444 !important;
+  color: #ffffff !important;
+  border: 2px solid #ef4444 !important;
+  font-family: var(--sl-font-display) !important;
+}
+
+.hero .actions a.action.secondary {
+  background-color: transparent !important;
+  color: var(--sl-color-white) !important;
+  border: 2px solid var(--sl-color-white) !important;
+  font-family: var(--sl-font-display) !important;
+}
+
+/* ==========================================================================
+   05. TABLES & API REFERENCE MATRIX
+   ========================================================================== */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 2px solid var(--sl-color-hairline) !important;
+  margin: 24px 0;
+  background-color: var(--sl-color-bg);
+}
+
+th {
+  background-color: var(--sl-color-gray-5) !important;
+  color: var(--sl-color-white) !important;
+  font-family: var(--sl-font-display) !important;
+  font-size: 0.85rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 12px 16px !important;
+  border: 1px solid var(--sl-color-hairline) !important;
+}
+
+td {
+  padding: 12px 16px !important;
+  border-bottom: 1px solid var(--sl-color-hairline) !important;
+  border-right: 1px solid var(--sl-color-hairline) !important;
+  color: var(--sl-color-gray-1) !important;
+  font-size: 0.9rem;
+}
+
+tr:hover td {
+  background-color: var(--sl-color-gray-6) !important;
+}
+
+/* ==========================================================================
+   06. CODE BLOCKS & EXPRESSIVE CODE
+   ========================================================================== */
+
+.expressive-code {
+  margin: 24px 0 !important;
+}
+
+.expressive-code pre {
+  border: 2px solid var(--sl-color-hairline) !important;
+  background-color: #0d0d0d !important;
+}
+
+:root[data-theme='light'] .expressive-code pre {
+  background-color: #1e1e1e !important;
+}
+
+.expressive-code .copy button {
+  border: 1px solid #ef4444 !important;
+  background-color: #0a0a0a !important;
+  color: #ffffff !important;
+}
+
+/* ==========================================================================
+   07. CALLOUTS & ASIDES (:::note, :::tip, :::warning)
+   ========================================================================== */
+
+.starlight-aside {
+  border: 2px solid var(--sl-color-hairline) !important;
+  border-left-width: 6px !important;
+  padding: 16px 20px !important;
+  margin: 24px 0 !important;
+  background-color: var(--sl-color-gray-6) !important;
+
+  .starlight-aside__title {
+    font-family: var(--sl-font-display) !important;
+    text-transform: uppercase;
+    font-size: 0.95rem;
+    color: var(--sl-color-white) !important;
+  }
+
+  p {
+    color: var(--sl-color-gray-1) !important;
+    font-size: 0.95rem;
+  }
+}
+
+.starlight-aside--note {
+  border-left-color: #ef4444 !important;
+}
+
+.starlight-aside--tip {
+  border-left-color: #10b981 !important;
+}
+
+.starlight-aside--warning {
+  border-left-color: #f59e0b !important;
+}
+
+/* ==========================================================================
+   08. PAGEFIND SEARCH MODAL
+   ========================================================================== */
+
+dialog.pagefind-ui__modal {
+  background-color: #0a0a0a !important;
+  border: 2px solid #ef4444 !important;
+}
+
+.pagefind-ui__search-input {
+  background-color: #171717 !important;
+  color: #ffffff !important;
+  border: 2px solid #262626 !important;
+}
+
+.pagefind-ui__result-link {
+  color: #ef4444 !important;
+  font-family: var(--sl-font-display) !important;
+}
+
+.pagefind-ui__result-excerpt {
+  color: #e5e7eb !important;
+}
+
+/* ==========================================================================
+   09. PAGINATION PREV / NEXT BUTTONS
+   ========================================================================== */
+
+.pagination-links a {
+  border: 2px solid var(--sl-color-hairline) !important;
+  background-color: var(--sl-color-gray-6) !important;
+  text-decoration: none;
+  padding: 16px !important;
+
+  &:hover {
+    border-color: #ef4444 !important;
+    background-color: var(--sl-color-gray-5) !important;
+  }
+
+  .link-title {
+    font-family: var(--sl-font-display) !important;
+    color: var(--sl-color-white) !important;
+  }
+}
+
+/* Live Demo Embed Container */
+.demo-embed-box {
+  border: 2px solid #ef4444;
+  padding: 20px;
+  background-color: #121212;
+  margin: 24px 0;
+}
+
+:root[data-theme='light'] .demo-embed-box {
+  background-color: #f8fafc;
+  border-color: #0a0a0a;
+}

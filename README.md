@@ -2,7 +2,9 @@
 
 An enterprise-grade, declarative structural directive suite for Angular applications that seamlessly composes PrimeNG's `p-skeleton` primitive.
 
-👉 **[Read Full Technical Documentation & API Guide](projects/ngx-skeleton/DOCUMENTATION.md)**
+🌐 **[Live Astro Starlight Documentation Portal](https://user.github.io/ngx-skeleton-suite/)**  
+⚡ **[Live Angular Interactive Demo App & Playground](https://user.github.io/ngx-skeleton-suite/demo/)**  
+📖 **[Read Technical Documentation & API Guide](projects/ngx-skeleton/DOCUMENTATION.md)**
 
 ---
 
@@ -55,6 +57,8 @@ export class UserProfileComponent {
 
 ## Documentation Links
 
+- 🌐 **[Live Astro Starlight Documentation Portal](https://user.github.io/ngx-skeleton-suite/)**
+- ⚡ **[Live Interactive Demo App & Playground](https://user.github.io/ngx-skeleton-suite/demo/)**
 - 📖 **[Developer Documentation & Customization Guide](projects/ngx-skeleton/DOCUMENTATION.md)**
 - 📦 **[Package Source Code](projects/ngx-skeleton)**
 
