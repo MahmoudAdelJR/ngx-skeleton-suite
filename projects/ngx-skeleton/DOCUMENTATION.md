@@ -9,7 +9,13 @@
 2. [Architecture & Design System](#architecture--design-system)
 3. [Installation & Setup](#installation--setup)
 4. [Global Provider Configuration](#global-provider-configuration)
-5. [Detailed Usage Examples](#detailed-usage-examples)
+5. [Styling & Customization Guide (SCSS, CSS Variables, Alignment & Themes)](#styling--customization-guide-scss-css-variables-alignment--themes)
+   - [1. CSS Custom Properties (CSS Variables)](#1-css-custom-properties-css-variables)
+   - [2. Directive Styling Inputs (Width, Height, Radius, Shape)](#2-directive-styling-inputs-width-height-radius-shape)
+   - [3. Alignment & Stack Layouts (Flexbox & Grid Alignment)](#3-alignment--stack-layouts-flexbox--grid-alignment)
+   - [4. Custom CSS & SCSS Overriding (`styleClass` & `containerClass`)](#4-custom-css--scss-overriding-styleclass--containerclass)
+   - [5. PrimeNG Theme Synergy](#5-primeng-theme-synergy)
+6. [Detailed Usage Examples](#detailed-usage-examples)
    - [1. Basic Boolean & Signal Loading](#1-basic-boolean--signal-loading)
    - [2. Data Source Binding via `from` Microsyntax](#2-data-source-binding-via-from-microsyntax)
    - [3. Composite Shape Presets](#3-composite-shape-presets)
@@ -20,7 +26,7 @@
    - [8. Error & Empty State Templates](#8-error--empty-state-templates)
    - [9. Custom Tree-Based Presets](#9-custom-tree-based-presets)
    - [10. Unit Testing with `SkeletonHarness`](#10-unit-testing-with-skeletonharness)
-6. [Complete API Reference](#complete-api-reference)
+7. [Complete API Reference](#complete-api-reference)
 
 ---
 
@@ -150,6 +156,212 @@ export const appConfig: ApplicationConfig = {
   ],
 };
 ```
+
+---
+
+## Styling & Customization Guide (SCSS, CSS Variables, Alignment & Themes)
+
+`ngx-skeleton` provides multiple layers of styling customization ranging from CSS custom properties (variables), fine-grained alignment controls, directive inputs for shapes and dimensions, custom SCSS/CSS class overrides, and native PrimeNG theme integration.
+
+---
+
+### 1. CSS Custom Properties (CSS Variables)
+
+`ngx-skeleton` uses CSS Custom Properties to allow instant global or context-scoped styling changes without needing `:ng-deep` or `!important` hacks.
+
+#### Core CSS Variables Table
+
+| CSS Custom Property | Default Value | Description |
+|---|---|---|
+| `--ngx-skeleton-base-color` | `var(--p-content-border-color, #1e293b)` | Base background color of skeleton shapes |
+| `--ngx-skeleton-highlight-color` | `var(--p-content-hover-background, rgba(255,255,255,0.15))` | Highlight/shimmer gradient color during animations |
+| `--ngx-skeleton-animation-duration` | `1.4s` | Duration/speed of `pulse`, `shimmer`, and `wave` animation cycles |
+| `--ngx-skeleton-fade-duration` | `180ms` | Fade-in transition speed when switching to real content |
+| `--ngx-skeleton-grid-gap` | `1rem` | Overall gap spacing in grid layouts |
+| `--ngx-skeleton-grid-row-gap` | `var(--ngx-skeleton-grid-gap, 1rem)` | Vertical row gap spacing in grid layouts |
+| `--ngx-skeleton-grid-col-gap` | `var(--ngx-skeleton-grid-gap, 1rem)` | Horizontal column gap spacing in grid layouts |
+| `--ngx-skeleton-grid-min` | `16rem` | Minimum item width for auto-fit responsive grid columns |
+
+#### Global Customization in `styles.scss`
+
+Override variables globally at the `:root` level or per light/dark mode selector:
+
+```scss
+/* styles.scss */
+:root {
+  /* Light Theme Skeleton Colors */
+  --ngx-skeleton-base-color: #e2e8f0;
+  --ngx-skeleton-highlight-color: #ffffff;
+  --ngx-skeleton-animation-duration: 1.2s;
+}
+
+[data-theme='dark'] {
+  /* Dark Theme Skeleton Colors */
+  --ngx-skeleton-base-color: #1e293b;
+  --ngx-skeleton-highlight-color: rgba(255, 255, 255, 0.12);
+}
+```
+
+#### Local / Container-Level Override
+
+Override skeleton styling for a specific component, section, or card:
+
+```scss
+/* user-card.component.scss */
+.user-card-skeleton-container {
+  --ngx-skeleton-base-color: #f1f5f9;
+  --ngx-skeleton-highlight-color: #3b82f6;
+}
+```
+
+---
+
+### 2. Directive Styling Inputs (Width, Height, Radius, Shape)
+
+You can pass explicit styling parameters directly on the directive microsyntax or input bindings:
+
+| Input | Type | Default | Description | Example |
+|---|---|---|---|---|
+| `width` | `string` | `'100%'` | Custom skeleton width | `width: '240px'` or `width: '80%'` |
+| `height` | `string` | `'1rem'` | Custom skeleton height | `height: '3rem'` or `height: '150px'` |
+| `shape` | `'rectangle' \| 'circle'` | `'rectangle'` | Geometry of the skeleton node | `shape: 'circle'` |
+| `size` | `string` | `undefined` | Square dimension or circle diameter | `size: '3.5rem'` |
+| `borderRadius` | `string` | `undefined` | Custom border radius | `borderRadius: '12px'` or `borderRadius: '50%'` |
+
+#### Example: Direct Input Customization
+
+```html
+<div
+  *skeleton="
+    isLoading;
+    width: '100%';
+    height: '200px';
+    borderRadius: '16px';
+    animation: 'wave'
+  "
+>
+  <app-hero-banner />
+</div>
+```
+
+---
+
+### 3. Alignment & Stack Layouts (Flexbox & Grid Alignment)
+
+`ngx-skeleton` supports flexible alignment across both preset stack structures and responsive grid layouts.
+
+#### A. Alignment in Presets (`SkeletonStackNode`)
+
+In custom tree presets, `SkeletonStackNode` allows complete flexbox alignment control:
+
+```ts
+import { SkeletonPreset } from 'ngx-skeleton';
+
+export const ALIGNED_HEADER_PRESET: SkeletonPreset = {
+  name: 'aligned-header',
+  shapes: [
+    {
+      type: 'stack',
+      direction: 'row',          // Horizontal layout ('row' | 'column')
+      alignItems: 'center',       // Vertical alignment ('flex-start' | 'center' | 'flex-end' | 'stretch')
+      justifyContent: 'space-between', // Horizontal distribution ('flex-start' | 'center' | 'space-between' | etc.)
+      gap: '1.5rem',             // Flex gap
+      children: [
+        { type: 'shape', shape: 'circle', size: '3.5rem' },
+        {
+          type: 'stack',
+          direction: 'column',
+          alignItems: 'flex-start',
+          justifyContent: 'center',
+          gap: '0.5rem',
+          grow: true,            // Flex grow: 1
+          children: [
+            { type: 'shape', width: '60%', height: '1.25rem' },
+            { type: 'shape', width: '35%', height: '0.875rem' },
+          ],
+        },
+        { type: 'shape', width: '80px', height: '2rem', borderRadius: '20px' }, // Action button
+      ],
+    },
+  ],
+};
+```
+
+#### B. Alignment in Grid Layouts (`SkeletonGridConfig`)
+
+Align grid items vertically within their grid cells using `alignItems`:
+
+```ts
+readonly gridConfig: SkeletonGridConfig = {
+  count: 6,
+  columns: { default: 1, sm: 2, md: 3 },
+  gap: '1.5rem',
+  alignItems: 'center', // Align skeleton items in center of grid cells
+  itemPreset: 'card',
+};
+```
+
+---
+
+### 4. Custom CSS & SCSS Overriding (`styleClass` & `containerClass`)
+
+When custom SCSS classes or utility framework classes (e.g. Bootstrap or Tailwind) are required, `ngx-skeleton` provides direct hooks:
+
+#### Directive `styleClass`
+
+Applies custom CSS class(es) directly to underlying skeleton shapes:
+
+```html
+<div *skeleton="isLoading; styleClass: 'custom-skeleton-glow'">
+  <app-content-box />
+</div>
+```
+
+```scss
+/* styles.scss */
+.custom-skeleton-glow {
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+}
+```
+
+#### Preset `containerClass`
+
+Applies custom CSS class(es) to the preset container host wrapper:
+
+```ts
+export const CUSTOM_CARD_PRESET: SkeletonPreset = {
+  name: 'custom-card',
+  containerClass: 'p-4 border-round-xl surface-card shadow-2', // PrimeFlex / PrimeNG utility classes
+  shapes: [ ... ]
+};
+```
+
+#### Targetable Internal CSS Classes
+
+You can also target internal structural classes in component/global SCSS:
+
+- `.ngx-skeleton-host`: The top-level skeleton wrapper element.
+- `.ngx-skeleton-preset-item`: Host container for preset shape trees.
+- `.ngx-skeleton-stack`: Internal flex containers generated by preset stacks.
+- `.p-skeleton`: The PrimeNG underlying primitive node.
+
+```scss
+/* Custom SCSS override */
+.ngx-skeleton-host .p-skeleton {
+  border-radius: 8px !important;
+}
+```
+
+---
+
+### 5. PrimeNG Theme Synergy
+
+`ngx-skeleton` seamlessly inherits active PrimeNG design system tokens (e.g. PrimeNG Aura, Lara, Nora, Material, or custom design tokens):
+
+- Defaults to `--p-content-border-color` for standard background shading.
+- Defaults to `--p-content-hover-background` for shimmer/wave highlights.
+- Responds dynamically when switching PrimeNG themes at runtime.
 
 ---
 
@@ -457,7 +669,14 @@ describe('MyComponent', () => {
 | `from` | `Observable<T> \| Signal<T> \| PromiseLike<T>` | `undefined` | Data-producing async source |
 | `preset` | `string \| SkeletonPreset` | `undefined` | Named preset or tree definition |
 | `grid` | `SkeletonGridConfig` | `undefined` | Responsive CSS grid configuration |
-| `animation` | `'prime' \| 'pulse' \| 'shimmer' \| 'wave' \| 'none'` | `'prime'` | Animation mode |
+| `width` | `string` | `'100%'` | Custom skeleton width (e.g. `'200px'`, `'80%'`) |
+| `height` | `string` | `'1rem'` | Custom skeleton height (e.g. `'2rem'`, `'150px'`) |
+| `shape` | `'rectangle' \| 'circle'` | `'rectangle'` | Geometry shape of skeleton item |
+| `size` | `string` | `undefined` | Square dimension or circle diameter (e.g. `'3rem'`) |
+| `borderRadius` | `string` | `undefined` | Custom border radius (e.g. `'12px'`, `'50%'`) |
+| `count` | `number` | `1` | Number of skeleton items to repeat |
+| `styleClass` | `string` | `undefined` | Custom CSS class(es) passed to `<p-skeleton>` nodes |
+| `animation` | `'prime' \| 'pulse' \| 'shimmer' \| 'wave' \| 'none'` | `'prime'` | Animation engine mode |
 | `delay` | `number` | `80` | Delay timer in ms before displaying skeleton |
 | `minimumDuration` | `number` | `200` | Minimum visible duration in ms |
 | `fadeIn` | `boolean \| number` | `180` | Content fade-in transition duration |

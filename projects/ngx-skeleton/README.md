@@ -18,7 +18,7 @@
 
 - ⚡ **Declarative Structural Directive**: Simplify templates with `*skeleton="isLoading"`.
 - 🔄 **Universal Source Support**: Accepts `boolean`, `Signal<boolean>`, `Observable<boolean>`, Promises, or data streams (`*skeleton="let user from user$"`).
-- 🎨 **PrimeNG Primitive Integration**: Composition of PrimeNG `p-skeleton` with shape and size inputs.
+- 🎨 **Full Styling & Theme Customization**: Custom CSS variables (`--ngx-skeleton-base-color`, `--ngx-skeleton-highlight-color`), alignment controls, shape & size inputs, custom SCSS class hooks (`styleClass`), and PrimeNG theme integration.
 - ✨ **Custom Animation Engine**: Supports `wave`, `shimmer`, `pulse`, `prime`, and `none` modes.
 - 📐 **Responsive CSS Grid Generation**: Auto-fit or breakpoint-based grid placeholders.
 - 🎯 **Composite Presets**: Pre-built shapes (`profile-card`, `card`, `list-item`, `avatar`, `paragraph`, `table-row`) and custom tree definitions.
