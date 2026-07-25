@@ -4,6 +4,9 @@ import starlight from '@astrojs/starlight';
 export default defineConfig({
   site: 'https://MahmoudAdelJR.github.io',
   base: '/ngx-skeleton-suite',
+  build: {
+    assets: 'assets',
+  },
   integrations: [
     starlight({
       title: 'NGX-SKELETON SUITE',
