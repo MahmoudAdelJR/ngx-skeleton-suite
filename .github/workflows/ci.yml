@@ -1,11 +1,8 @@
 name: CI
 
 on:
-  push:
-    branches:
-      - main
-      - master
-  pull_request:
+  # Manual only for now (GitHub Actions is billing-locked on this account).
+  # Re-add push/pull_request triggers once Actions is available again.
   workflow_dispatch:
 
 permissions:

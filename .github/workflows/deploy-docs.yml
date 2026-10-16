@@ -1,10 +1,9 @@
 name: Deploy Documentation & Interactive Demo to GitHub Pages
 
+# Manual only. Branch-based Pages deployment (see scripts/deploy-gh-pages.mjs and
+# the `gh-pages` branch) is the primary publishing path and does not consume
+# Actions minutes. Run this workflow manually when Actions is available.
 on:
-  push:
-    branches:
-      - main
-      - master
   workflow_dispatch:
 
 permissions:

@@ -8,6 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "verify:decoupling": "node scripts/verify-decoupling.mjs",
+    "deploy:docs": "node scripts/deploy-gh-pages.mjs",
     "dev:docs": "npm --prefix docs run dev",
     "build:docs": "npm --prefix docs run build",
     "preview:docs": "npx http-server docs/dist -p 4321"
