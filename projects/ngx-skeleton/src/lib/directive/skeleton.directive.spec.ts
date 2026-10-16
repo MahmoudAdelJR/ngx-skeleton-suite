@@ -4,12 +4,13 @@ import { By } from '@angular/platform-browser';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { SkeletonDirective } from './skeleton.directive';
 import { SkeletonHostComponent } from '../component/skeleton-host.component';
+import { SkeletonAnimation } from '../renderer/skeleton-render-model';
 import { SkeletonDataSource } from './skeleton-context';
 import { provideNgxSkeleton, provideSkeletonPresets } from '../config/skeleton-config';
 import { SkeletonPreset } from '../preset/preset.models';
 import { SkeletonGridConfig } from '../grid/skeleton-grid.models';
 import { LayoutCacheService } from '../layout/layout-cache.service';
-import { SkeletonHarness } from '../testing/skeleton-harness';
+import { SkeletonHarness } from '../../../testing/src/public-api';
 
 interface User {
   id: number;
@@ -70,7 +71,7 @@ class TestHostComponent {
   height = '2rem';
   shape: 'rectangle' | 'circle' = 'rectangle';
   count = 1;
-  animation: 'prime' | 'pulse' | 'shimmer' | 'wave' | 'none' = 'prime';
+  animation: SkeletonAnimation = 'adapter-default';
   delay = 0;
   minimumDuration = 0;
   fadeIn: boolean | number = false;

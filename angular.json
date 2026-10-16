@@ -28,7 +28,13 @@
               "zone.js",
               "zone.js/testing"
             ],
-            "tsConfig": "projects/ngx-skeleton/tsconfig.spec.json"
+            "tsConfig": "projects/ngx-skeleton/tsconfig.spec.json",
+            "include": [
+              "**/*.spec.ts",
+              "../primeng/**/*.spec.ts",
+              "../material/**/*.spec.ts",
+              "../testing/**/*.spec.ts"
+            ]
           }
         }
       }
@@ -77,7 +83,10 @@
                   "maximumError": "15kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "optimization": {
+                "fonts": false
+              }
             },
             "development": {
               "optimization": false,

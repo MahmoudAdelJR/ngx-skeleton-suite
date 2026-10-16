@@ -33,10 +33,13 @@ jobs:
           cache: 'npm'
 
       - name: Install Dependencies
-        run: npm ci --legacy-peer-deps
+        run: npm ci
 
       - name: Build Library Package
         run: npx ng build ngx-skeleton
+
+      - name: Verify Decoupling
+        run: npm run verify:decoupling
 
       - name: Build Angular Demo App (Interactive Playground)
         run: npx ng build demo-app --base-href /ngx-skeleton-suite/demo/ --output-path dist/demo-app

@@ -1,15 +1,20 @@
-import { Component, ChangeDetectionStrategy, input, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { SkeletonModule } from 'primeng/skeleton';
-import { SkeletonPreset, SkeletonPresetNode, SkeletonStackNode } from '../preset/preset.models';
+import { Component, ChangeDetectionStrategy, input, computed, inject } from '@angular/core';
+import { CommonModule, NgComponentOutlet } from '@angular/common';
+import {
+  SkeletonPreset,
+  SkeletonPresetNode,
+  SkeletonShapeNode,
+  SkeletonStackNode,
+} from '../preset/preset.models';
 import { SkeletonGridConfig } from '../grid/skeleton-grid.models';
-
-export type SkeletonAnimation = 'prime' | 'pulse' | 'shimmer' | 'wave' | 'none';
+import { SkeletonAnimation, SkeletonRenderModel } from '../renderer/skeleton-render-model';
+import { NGX_SKELETON_RENDERER, SkeletonRendererType } from '../renderer/skeleton-renderer';
+import { NativeSkeletonRendererComponent } from '../renderer/native-skeleton-renderer.component';
 
 @Component({
   selector: 'ngx-skeleton-host',
   standalone: true,
-  imports: [CommonModule, SkeletonModule],
+  imports: [CommonModule, NgComponentOutlet],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div
@@ -17,32 +22,24 @@ export type SkeletonAnimation = 'prime' | 'pulse' | 'shimmer' | 'wave' | 'none';
       [class.ngx-skeleton-grid]="isGrid()"
       [class.ngx-skeleton-grid--auto-fit]="isAutoFit()"
       [class.ngx-skeleton-grid--responsive]="isResponsiveCols()"
-      [class.ngx-skeleton-pulse]="animation() === 'pulse'"
-      [class.ngx-skeleton-shimmer]="animation() === 'shimmer'"
-      [class.ngx-skeleton-wave]="animation() === 'wave'"
       [class]="presetContainerClass()"
       [style]="combinedStyle()"
       [attr.aria-label]="ariaLabel() || 'Loading content'"
+      [attr.data-ngx-skeleton-host]="''"
       aria-live="polite"
       role="status"
     >
-      @for (item of items(); track $index) {
-        @if (effectivePresetObj()) {
+      @if (effectivePresetObj(); as presetObj) {
+        @for (item of items(); track $index) {
           <div class="ngx-skeleton-preset-item">
-            @for (node of effectivePresetObj()!.shapes; track $index) {
+            @for (node of presetObj.shapes; track $index) {
               <ng-container *ngTemplateOutlet="renderNode; context: { $implicit: node }"></ng-container>
             }
           </div>
-        } @else {
-          <p-skeleton
-            [shape]="shape()"
-            [width]="width()"
-            [height]="height()"
-            [size]="size()"
-            [borderRadius]="borderRadius()"
-            [class]="styleClass() || ''"
-            aria-hidden="true"
-          />
+        }
+      } @else {
+        @for (item of items(); track $index) {
+          <ng-container *ngComponentOutlet="rendererType; inputs: simpleInputs()"></ng-container>
         }
       }
     </div>
@@ -64,15 +61,9 @@ export type SkeletonAnimation = 'prime' | 'pulse' | 'shimmer' | 'wave' | 'none';
           }
         </div>
       } @else {
-        <p-skeleton
-          [shape]="node.shape || shape()"
-          [width]="node.width || width()"
-          [height]="node.height || height()"
-          [size]="node.size || size()"
-          [borderRadius]="node.borderRadius || borderRadius()"
-          [class]="node.styleClass || styleClass() || ''"
-          aria-hidden="true"
-        />
+        <ng-container
+          *ngComponentOutlet="rendererType; inputs: nodeInputs(node)"
+        ></ng-container>
       }
     </ng-template>
   `,
@@ -86,7 +77,7 @@ export class SkeletonHostComponent {
   readonly borderRadius = input<string>();
   readonly count = input<number>(1);
   readonly styleClass = input<string>();
-  readonly animation = input<SkeletonAnimation>('prime');
+  readonly animation = input<SkeletonAnimation>('adapter-default');
   readonly ariaLabel = input<string>('Loading content');
 
   readonly preset = input<SkeletonPreset | undefined>();
@@ -94,6 +85,13 @@ export class SkeletonHostComponent {
 
   readonly preservedHeight = input<string | undefined>();
   readonly preservedWidth = input<string | undefined>();
+
+  /**
+   * Resolved renderer: the configured adapter, or the native CSS renderer as the
+   * dependency-free default.
+   */
+  readonly rendererType: SkeletonRendererType =
+    inject(NGX_SKELETON_RENDERER, { optional: true }) ?? NativeSkeletonRendererComponent;
 
   readonly isGrid = computed(() => !!this.grid());
   readonly isAutoFit = computed(() => !!this.grid()?.minItemWidth);
@@ -114,6 +112,21 @@ export class SkeletonHostComponent {
     const cnt = Math.max(1, gridCount ?? this.count() ?? 1);
     return Array.from({ length: cnt }, (_, i) => i);
   });
+
+  /** Base render model applied to simple (non-preset) shapes. */
+  readonly baseModel = computed<SkeletonRenderModel>(() => ({
+    shape: this.shape(),
+    width: this.width() ?? '100%',
+    height: this.height() ?? '1rem',
+    size: this.size(),
+    borderRadius: this.borderRadius(),
+    styleClass: this.styleClass(),
+    animation: this.animation(),
+  }));
+
+  readonly simpleInputs = computed<Record<string, unknown>>(() => ({
+    model: this.baseModel(),
+  }));
 
   readonly combinedStyle = computed(() => {
     const styles: Record<string, string> = {};
@@ -154,6 +167,22 @@ export class SkeletonHostComponent {
 
     return styles;
   });
+
+  /** Merges a preset shape node over the current base model. */
+  nodeInputs(node: SkeletonPresetNode): Record<string, unknown> {
+    const base = this.baseModel();
+    const shapeNode = node as SkeletonShapeNode;
+    const model: SkeletonRenderModel = {
+      shape: shapeNode.shape ?? base.shape,
+      width: shapeNode.width ?? base.width,
+      height: shapeNode.height ?? base.height,
+      size: shapeNode.size ?? base.size,
+      borderRadius: shapeNode.borderRadius ?? base.borderRadius,
+      styleClass: shapeNode.styleClass ?? base.styleClass,
+      animation: base.animation,
+    };
+    return { model };
+  }
 
   isStackNode(node: SkeletonPresetNode): node is SkeletonStackNode {
     return (node as SkeletonStackNode).type === 'stack' || Array.isArray((node as SkeletonStackNode).children);

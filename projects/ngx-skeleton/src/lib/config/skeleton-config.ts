@@ -1,5 +1,5 @@
 import { InjectionToken, Provider } from '@angular/core';
-import { SkeletonAnimation } from '../component/skeleton-host.component';
+import { SkeletonAnimation } from '../renderer/skeleton-render-model';
 import { SkeletonPreset } from '../preset/preset.models';
 import { SKELETON_PRESETS_TOKEN } from '../preset/skeleton-preset.registry';
 
@@ -15,7 +15,7 @@ export interface NgxSkeletonConfig {
 }
 
 export const DEFAULT_NGX_SKELETON_CONFIG: NgxSkeletonConfig = {
-  animation: 'prime',
+  animation: 'adapter-default',
   fadeInMs: 180,
   delayMs: 80,
   minimumDurationMs: 200,

@@ -1,0 +1,9 @@
+:host {
+  display: contents;
+}
+
+/* `ngx-skeleton-loader` bakes a default bottom margin into its inner node; the core
+   host manages spacing via presets and grids, so reset it here. */
+:host ::ng-deep .skeleton-loader {
+  margin: 0;
+}

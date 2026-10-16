@@ -101,7 +101,7 @@ export class AppComponent {
     { name: 'from', type: 'Observable<T> | Signal<T> | Promise<T>', default: 'undefined', description: 'Data source binding via microsyntax (*skeleton="let user from user$")' },
     { name: 'preset', type: 'string | SkeletonPreset', default: 'undefined', description: 'Named composite shape preset or custom tree structure' },
     { name: 'grid', type: 'SkeletonGridConfig', default: 'undefined', description: 'Responsive CSS Grid layout configuration' },
-    { name: 'animation', type: "'wave' | 'shimmer' | 'pulse' | 'prime' | 'none'", default: "'prime'", description: 'Animation engine mode' },
+    { name: 'animation', type: "'adapter-default' | 'wave' | 'shimmer' | 'pulse' | 'none'", default: "'adapter-default'", description: 'Animation mode; adapter-default delegates to the active renderer' },
     { name: 'width', type: 'string', default: "'100%'", description: 'Custom width string (e.g. "250px", "80%")' },
     { name: 'height', type: 'string', default: "'1rem'", description: 'Custom height string (e.g. "2rem", "150px")' },
     { name: 'shape', type: "'rectangle' | 'circle'", default: "'rectangle'", description: 'Geometric shape of skeleton elements' },
@@ -126,6 +126,7 @@ export class AppComponent {
           { id: 'npm-installation', label: '01. NPM Installation' },
           { id: 'standalone-usage', label: '02. Standalone Component' },
           { id: 'global-provider', label: '03. Global Provider Config' },
+          { id: 'renderer-adapters', label: '04. Renderer Adapters' },
         ];
       case 'styling':
         return [
@@ -187,7 +188,7 @@ export class AppComponent {
     lines.push(`  *skeleton="`);
     lines.push(`    isLoading;`);
     if (this.selectedPreset) lines.push(`    preset: '${this.selectedPreset}';`);
-    if (this.selectedAnimation !== 'prime') lines.push(`    animation: '${this.selectedAnimation}';`);
+    if (this.selectedAnimation !== 'adapter-default') lines.push(`    animation: '${this.selectedAnimation}';`);
     if (this.customCount > 1) lines.push(`    count: ${this.customCount};`);
     if (this.delayMs !== 80) lines.push(`    delay: ${this.delayMs};`);
     if (this.minDurationMs !== 200) lines.push(`    minimumDuration: ${this.minDurationMs};`);

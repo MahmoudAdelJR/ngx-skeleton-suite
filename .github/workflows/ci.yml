@@ -1,0 +1,89 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Primary workspace: validates the real dependency tree resolves without
+  # `--legacy-peer-deps`, builds every entry point, runs all tests, and enforces
+  # the renderer-decoupling invariant.
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install Dependencies (strict peer resolution)
+        run: npm ci
+
+      - name: Build Library (all entry points)
+        run: npx ng build ngx-skeleton
+
+      - name: Verify Decoupling
+        run: npm run verify:decoupling
+
+      - name: Run Unit Tests
+        run: npx ng test ngx-skeleton --watch=false --no-progress --browsers=ChromeHeadless
+
+      - name: Build Demo App
+        run: npx ng build demo-app --configuration development
+
+  # Compatibility matrix: scaffold a clean Angular consumer for each supported
+  # Angular/PrimeNG pair and build it against the packed library. PrimeNG majors
+  # track Angular majors (PrimeNG 20 -> Angular 20), so pairs are explicit.
+  compatibility:
+    runs-on: ubuntu-latest
+    needs: verify
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - angular: 20
+            adapter: native
+          - angular: 20
+            adapter: primeng
+            primeng: 20
+          - angular: 20
+            adapter: material
+          - angular: 21
+            adapter: native
+          - angular: 22
+            adapter: native
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install Workspace Dependencies
+        run: npm ci
+
+      - name: Build and Pack Library
+        run: npx ng build ngx-skeleton && npm pack ./dist/ngx-skeleton
+
+      - name: Run Compatibility Fixture
+        run: bash scripts/compat-fixture.sh "${{ matrix.angular }}" "${{ matrix.adapter }}" "${{ matrix.primeng }}"
+        env:
+          LIB_TARBALL: ${{ github.workspace }}

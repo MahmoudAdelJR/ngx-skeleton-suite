@@ -1,6 +1,6 @@
 # `ngx-skeleton-suite`
 
-An enterprise-grade, declarative structural directive suite for Angular applications that seamlessly composes PrimeNG's `p-skeleton` primitive.
+An enterprise-grade, declarative, renderer-agnostic structural directive suite for Angular. Ships a dependency-free native CSS renderer by default plus optional PrimeNG and Angular Material adapters.
 
 🌐 **[Live Astro Starlight Documentation Portal](https://MahmoudAdelJR.github.io/ngx-skeleton-suite/)**  
 ⚡ **[Live Angular Interactive Demo App & Playground](https://MahmoudAdelJR.github.io/ngx-skeleton-suite/demo/)**  
@@ -12,8 +12,9 @@ An enterprise-grade, declarative structural directive suite for Angular applicat
 
 - ⚡ **Declarative Structural Directive**: Clean `*skeleton="isLoading"` template syntax.
 - 🔄 **Universal Async Source Support**: Signals, Observables, Promises, or data streams (`*skeleton="let user from user$"`).
-- 🎨 **Extensive Styling & Theme Customization**: Custom CSS variables (`--ngx-skeleton-base-color`, `--ngx-skeleton-highlight-color`), alignment controls, shape & size inputs, custom SCSS class hooks (`styleClass`), and PrimeNG theme synergy.
-- ✨ **Custom Animation Engine**: `wave`, `shimmer`, `pulse`, `prime`, and `none` modes.
+- 🧩 **Renderer Adapters**: Native CSS (default), PrimeNG, and Angular Material; add your own via a documented renderer contract.
+- 🎨 **Extensive Styling & Theme Customization**: Custom CSS variables (`--ngx-skeleton-base-color`, `--ngx-skeleton-highlight-color`), alignment controls, shape & size inputs, and class hooks (`styleClass`).
+- ✨ **Custom Animation Engine**: `adapter-default`, `wave`, `shimmer`, `pulse`, and `none` modes.
 - 📐 **Responsive CSS Grid Generation**: Auto-fit or breakpoint-based grid placeholders.
 - 🎯 **Composite Presets & Custom Trees**: Pre-built presets (`profile-card`, `card`, `list-item`, `avatar`, `paragraph`, `table-row`) and nested flex tree structures.
 - 🛡️ **Flicker Protection & Timing Controls**: Delay timer (`skeletonDelay`) and minimum visible duration (`skeletonMinimumDuration`).
@@ -41,6 +42,16 @@ import { SkeletonDirective } from 'ngx-skeleton-suite';
 export class UserProfileComponent {
   isLoading = signal(true);
 }
+```
+
+### Renderer Adapters
+
+```ts
+import { providePrimeNgSkeleton } from 'ngx-skeleton-suite/primeng';
+import { provideMaterialSkeleton } from 'ngx-skeleton-suite/material';
+
+// app.config.ts providers: [...]
+// Native CSS is the default; register one of the above to render with a UI library.
 ```
 
 ### Styling Example (CSS Variables)

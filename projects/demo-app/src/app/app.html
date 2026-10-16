@@ -97,7 +97,9 @@
           <nav class="vb-breadcrumb">DOCUMENTATION &gt; GETTING STARTED</nav>
           <h1 class="chapter-title">GETTING STARTED WITH NGX-SKELETON</h1>
           <p class="chapter-lead">
-            Enterprise-grade structural directive suite for Angular 18+ and PrimeNG. Eliminate repeated template boilerplate, prevent layout shifts (CLS), and enforce design system precision.
+            Renderer-agnostic structural directive suite for Angular 18+. Ship skeletons with native CSS,
+            PrimeNG, or Angular Material renderers. Eliminate repeated template boilerplate, prevent
+            layout shifts (CLS), and enforce design system precision.
           </p>
 
           <hr class="vb-divider" />
@@ -118,8 +120,9 @@
               <div class="split-preview vb-card">
                 <span class="vb-label">DEPENDENCY MATRIX</span>
                 <p style="font-size: 13px;">• Angular Core: <code>&gt;= 18.0.0 &lt; 23.0.0</code></p>
-                <p style="font-size: 13px;">• PrimeNG: <code>&gt;= 17.0.0 &lt; 23.0.0</code></p>
                 <p style="font-size: 13px;">• RxJS: <code>&gt;= 7.4.0</code></p>
+                <p style="font-size: 13px;">• PrimeNG (optional adapter): <code>&gt;= 17.0.0 &lt; 24.0.0</code> (match your Angular major)</p>
+                <p style="font-size: 13px;">• ngx-skeleton-loader (optional Material adapter): <code>&gt;= 11.0.0</code></p>
               </div>
             </div>
           </section>
@@ -188,6 +191,30 @@ export const appConfig: ApplicationConfig = &#123;
       fadeInMs: 180,
       preserveLayout: true,
     &#125;),
+  ],
+&#125;;</code></pre>
+            </div>
+          </section>
+        <!-- Section 4 -->
+          <section id="renderer-adapters" class="doc-section">
+            <span class="vb-chip vb-chip-accent">STEP 04</span>
+            <h2>RENDERER ADAPTERS</h2>
+            <p>By default <code>ngx-skeleton-suite</code> renders dependency-free native CSS skeletons. Install and register a renderer adapter only when you need it:</p>
+
+            <div class="vb-code-block">
+              <pre><code>// Native CSS (default) — no extra dependencies
+import &#123; provideNgxSkeleton &#125; from 'ngx-skeleton-suite';
+
+// PrimeNG adapter
+import &#123; providePrimeNgSkeleton &#125; from 'ngx-skeleton-suite/primeng';
+
+// Material adapter (based on ngx-skeleton-loader)
+import &#123; provideMaterialSkeleton &#125; from 'ngx-skeleton-suite/material';
+
+export const appConfig: ApplicationConfig = &#123;
+  providers: [
+    provideNgxSkeleton(&#123; animation: 'adapter-default' &#125;),
+    providePrimeNgSkeleton(), // or provideMaterialSkeleton()
   ],
 &#125;;</code></pre>
             </div>
@@ -536,7 +563,7 @@ export const appConfig: ApplicationConfig = &#123;
                   <button class="vb-chip" [class.active]="selectedAnimation === 'wave'" (click)="selectedAnimation = 'wave'">WAVE</button>
                   <button class="vb-chip" [class.active]="selectedAnimation === 'shimmer'" (click)="selectedAnimation = 'shimmer'">SHIMMER</button>
                   <button class="vb-chip" [class.active]="selectedAnimation === 'pulse'" (click)="selectedAnimation = 'pulse'">PULSE</button>
-                  <button class="vb-chip" [class.active]="selectedAnimation === 'prime'" (click)="selectedAnimation = 'prime'">PRIME</button>
+                  <button class="vb-chip" [class.active]="selectedAnimation === 'adapter-default'" (click)="selectedAnimation = 'adapter-default'">ADAPTER</button>
                 </div>
               </div>
 
@@ -608,7 +635,7 @@ export const appConfig: ApplicationConfig = &#123;
   <footer class="vb-footer">
     <div class="vb-footer-inner">
       <span class="vb-issue-tag">NGX-SKELETON SUITE // MIT LICENSE</span>
-      <p>BUILT FOR ANGULAR CORE &gt;= 18.0.0 &amp; PRIMENG &gt;= 17.0.0</p>
+      <p>NATIVE CSS BY DEFAULT • OPTIONAL PRIMENG &amp; MATERIAL RENDERER ADAPTERS • ANGULAR CORE &gt;= 18.0.0</p>
     </div>
   </footer>
 </div>

@@ -10,6 +10,18 @@
     "paths": {
       "ngx-skeleton": [
         "./dist/ngx-skeleton"
+      ],
+      "ngx-skeleton-suite": [
+        "./projects/ngx-skeleton/src/public-api.ts"
+      ],
+      "ngx-skeleton-suite/primeng": [
+        "./projects/ngx-skeleton/primeng/src/public-api.ts"
+      ],
+      "ngx-skeleton-suite/material": [
+        "./projects/ngx-skeleton/material/src/public-api.ts"
+      ],
+      "ngx-skeleton-suite/testing": [
+        "./projects/ngx-skeleton/testing/src/public-api.ts"
       ]
     },
     "noFallthroughCasesInSwitch": true,

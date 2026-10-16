@@ -1,25 +1,41 @@
 {
   "name": "ngx-skeleton-suite",
-  "version": "1.0.0",
-  "description": "Enterprise-grade declarative structural directive for Angular & PrimeNG skeleton placeholders",
+  "version": "2.0.0",
+  "description": "Renderer-agnostic declarative skeleton directive for Angular with native CSS, PrimeNG, and Material renderer adapters",
   "keywords": [
     "angular",
     "ngx-skeleton",
     "ngx-skeleton-suite",
-    "primeng",
     "skeleton",
     "directive",
     "loading",
     "cls-prevention",
     "signals",
-    "rxjs"
+    "rxjs",
+    "renderer",
+    "adapter",
+    "primeng",
+    "angular-material"
   ],
   "license": "MIT",
   "peerDependencies": {
     "@angular/common": ">=18.0.0 <23.0.0",
     "@angular/core": ">=18.0.0 <23.0.0",
-    "primeng": ">=17.0.0 <23.0.0",
-    "rxjs": ">=7.4.0"
+    "@angular/platform-browser": ">=18.0.0 <23.0.0",
+    "rxjs": ">=7.4.0",
+    "primeng": ">=17.0.0 <24.0.0",
+    "ngx-skeleton-loader": ">=11.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@angular/platform-browser": {
+      "optional": true
+    },
+    "primeng": {
+      "optional": true
+    },
+    "ngx-skeleton-loader": {
+      "optional": true
+    }
   },
   "dependencies": {
     "tslib": "^2.3.0"

@@ -1,6 +1,6 @@
 # `ngx-skeleton` Technical Documentation & Developer Guide
 
-`ngx-skeleton` is an enterprise-grade, declarative structural directive suite for Angular applications that seamlessly composes PrimeNG's `p-skeleton` primitive. It eliminates boilerplate `<ng-container *ngIf="...">` loading blocks, handles Signals, RxJS Observables, and Promises, generates responsive CSS grid layouts, prevents Cumulative Layout Shift (CLS), and provides SSR/hydration safety out of the box.
+`ngx-skeleton` is an enterprise-grade, declarative, renderer-agnostic structural directive suite for Angular applications. It renders dependency-free native CSS skeletons by default and supports optional PrimeNG and Angular Material adapter entry points. It eliminates boilerplate `<ng-container *ngIf="...">` loading blocks, handles Signals, RxJS Observables, and Promises, generates responsive CSS grid layouts, prevents Cumulative Layout Shift (CLS), and provides SSR/hydration safety out of the box.
 
 ---
 
@@ -14,7 +14,7 @@
    - [2. Directive Styling Inputs (Width, Height, Radius, Shape)](#2-directive-styling-inputs-width-height-radius-shape)
    - [3. Alignment & Stack Layouts (Flexbox & Grid Alignment)](#3-alignment--stack-layouts-flexbox--grid-alignment)
    - [4. Custom CSS & SCSS Overriding (`styleClass` & `containerClass`)](#4-custom-css--scss-overriding-styleclass--containerclass)
-   - [5. PrimeNG Theme Synergy](#5-primeng-theme-synergy)
+   - [5. Renderer Adapters & Theme Synergy](#5-renderer-adapters--theme-synergy)
 6. [Detailed Usage Examples](#detailed-usage-examples)
    - [1. Basic Boolean & Signal Loading](#1-basic-boolean--signal-loading)
    - [2. Data Source Binding via `from` Microsyntax](#2-data-source-binding-via-from-microsyntax)
@@ -32,13 +32,17 @@
 
 ## Compatibility Matrix
 
-`ngx-skeleton` supports modern Angular versions and broad PrimeNG peer dependency ranges:
+`ngx-skeleton` supports modern Angular versions. UI-library integrations are optional adapter peers:
 
 | Package | Supported Version Range | Tested Compatibility |
 |---|---|---|
 | **Angular Core / Common** | `>= 18.0.0 < 23.0.0` | Angular 18.x, 19.x, 20.x, 21.x, 22.x |
-| **PrimeNG** | `>= 17.0.0 < 23.0.0` | PrimeNG 17.x, 18.x, 19.x, 20.x, 21.x, 22.x |
 | **RxJS** | `>= 7.4.0` | RxJS 7.4+ & 7.8+ |
+| **PrimeNG** (optional, `/primeng` adapter) | `>= 17.0.0 < 24.0.0` | PrimeNG 17.x – 22.x |
+| **ngx-skeleton-loader** (optional, `/material` adapter) | `>= 11.0.0` | 11.x – 13.x |
+
+> PrimeNG majors track Angular majors (PrimeNG 20 → Angular 20). When using the `/primeng`
+> adapter, install the PrimeNG major that matches your Angular major.
 
 ---
 
@@ -61,13 +65,21 @@
                                           |
                                +----------v----------+
                                |SkeletonHostComponent|
-                               | (Preset Node Renderer)|
+                               | (Layout + Presets)  |
                                +----------+----------+
                                           |
-                               +----------v----------+
-                               |  PrimeNG p-skeleton |
-                               | (Native HTML Host)  |
-                               +---------------------+
+                               +----------v-----------+
+                               | NGX_SKELETON_RENDERER|
+                               |  (adapter contract)  |
+                               +----------+-----------+
+                                          |
+                 +------------------------+------------------------+
+                 |                        |                        |
+        +--------v-------+     +----------v---------+    +---------v---------+
+        | Native CSS      |     | PrimeNG adapter    |    | Material adapter  |
+        | (default)       |     | (ngx-skeleton-     |    | (ngx-skeleton-    |
+        |                 |     |  suite/primeng)    |    |  suite/material)  |
+        +-----------------+     +--------------------+    +-------------------+
 ```
 
 ### Core Architecture Highlights
@@ -85,7 +97,11 @@
 ### 1. Installation
 
 ```bash
-npm install ngx-skeleton
+npm install ngx-skeleton-suite
+
+# Optional renderer adapters:
+npm install primeng            # for ngx-skeleton-suite/primeng
+npm install ngx-skeleton-loader # for ngx-skeleton-suite/material
 ```
 
 ### 2. Standalone Application Setup (Angular 18+)
@@ -94,7 +110,7 @@ Import `SkeletonDirective` directly into standalone components:
 
 ```ts
 import { Component, signal } from '@angular/core';
-import { SkeletonDirective } from 'ngx-skeleton';
+import { SkeletonDirective } from 'ngx-skeleton-suite';
 
 @Component({
   selector: 'app-user-card',
@@ -132,7 +148,7 @@ Configure application-wide default timing, animation modes, and custom preset re
 
 ```ts
 import { ApplicationConfig } from '@angular/core';
-import { provideNgxSkeleton, provideSkeletonPresets, SkeletonPreset } from 'ngx-skeleton';
+import { provideNgxSkeleton, provideSkeletonPresets, SkeletonPreset } from 'ngx-skeleton-suite';
 
 const HERO_HEADER_PRESET: SkeletonPreset = {
   name: 'hero-header',
@@ -161,7 +177,7 @@ export const appConfig: ApplicationConfig = {
 
 ## Styling & Customization Guide (SCSS, CSS Variables, Alignment & Themes)
 
-`ngx-skeleton` provides multiple layers of styling customization ranging from CSS custom properties (variables), fine-grained alignment controls, directive inputs for shapes and dimensions, custom SCSS/CSS class overrides, and native PrimeNG theme integration.
+`ngx-skeleton` provides multiple layers of styling customization ranging from CSS custom properties (variables), fine-grained alignment controls, directive inputs for shapes and dimensions, custom class overrides, and renderer adapter theming.
 
 ---
 
@@ -173,8 +189,8 @@ export const appConfig: ApplicationConfig = {
 
 | CSS Custom Property | Default Value | Description |
 |---|---|---|
-| `--ngx-skeleton-base-color` | `var(--p-content-border-color, #1e293b)` | Base background color of skeleton shapes |
-| `--ngx-skeleton-highlight-color` | `var(--p-content-hover-background, rgba(255,255,255,0.15))` | Highlight/shimmer gradient color during animations |
+| `--ngx-skeleton-base-color` | `#1e293b` (PrimeNG adapter falls back to `--p-content-border-color`) | Base background color of skeleton shapes |
+| `--ngx-skeleton-highlight-color` | `rgba(255,255,255,0.15)` (PrimeNG adapter falls back to `--p-content-hover-background`) | Highlight/shimmer gradient color during animations |
 | `--ngx-skeleton-animation-duration` | `1.4s` | Duration/speed of `pulse`, `shimmer`, and `wave` animation cycles |
 | `--ngx-skeleton-fade-duration` | `180ms` | Fade-in transition speed when switching to real content |
 | `--ngx-skeleton-grid-gap` | `1rem` | Overall gap spacing in grid layouts |
@@ -332,7 +348,7 @@ Applies custom CSS class(es) to the preset container host wrapper:
 ```ts
 export const CUSTOM_CARD_PRESET: SkeletonPreset = {
   name: 'custom-card',
-  containerClass: 'p-4 border-round-xl surface-card shadow-2', // PrimeFlex / PrimeNG utility classes
+  containerClass: 'p-4 border-round-xl surface-card shadow-2', // any utility classes (Tailwind, PrimeFlex, etc.)
   shapes: [ ... ]
 };
 ```
@@ -344,24 +360,33 @@ You can also target internal structural classes in component/global SCSS:
 - `.ngx-skeleton-host`: The top-level skeleton wrapper element.
 - `.ngx-skeleton-preset-item`: Host container for preset shape trees.
 - `.ngx-skeleton-stack`: Internal flex containers generated by preset stacks.
-- `.p-skeleton`: The PrimeNG underlying primitive node.
+- `.ngx-skeleton-shape`: Renderer-neutral shape hook, applied by every adapter.
+- Adapter-specific nodes: `.p-skeleton` (PrimeNG adapter) and `ngx-skeleton-loader` (Material adapter).
 
 ```scss
-/* Custom SCSS override */
-.ngx-skeleton-host .p-skeleton {
+/* Renderer-neutral override */
+.ngx-skeleton-host .ngx-skeleton-shape {
   border-radius: 8px !important;
 }
 ```
 
 ---
 
-### 5. PrimeNG Theme Synergy
+### 5. Renderer Adapters & Theme Synergy
 
-`ngx-skeleton` seamlessly inherits active PrimeNG design system tokens (e.g. PrimeNG Aura, Lara, Nora, Material, or custom design tokens):
+Rendering is selected once at bootstrap via an adapter provider. The default native CSS renderer
+uses the suite's own CSS variables. The PrimeNG adapter additionally inherits active PrimeNG design
+system tokens (Aura, Lara, Nora, Material, or custom), and the Material adapter inherits Material
+system tokens:
 
-- Defaults to `--p-content-border-color` for standard background shading.
-- Defaults to `--p-content-hover-background` for shimmer/wave highlights.
-- Responds dynamically when switching PrimeNG themes at runtime.
+- Native: `--ngx-skeleton-base-color` / `--ngx-skeleton-highlight-color`.
+- PrimeNG adapter: falls back to `--p-content-border-color` and `--p-content-hover-background`.
+- Material adapter: falls back to `--mat-sys-surface-variant`.
+
+```ts
+import { providePrimeNgSkeleton } from 'ngx-skeleton-suite/primeng';
+import { provideMaterialSkeleton } from 'ngx-skeleton-suite/material';
+```
 
 ---
 
@@ -496,7 +521,7 @@ export class GridDemoComponent {
 
 ### 5. Animation Engines & Reduced Motion
 
-Supports 5 animation modes (`wave`, `shimmer`, `pulse`, `prime`, `none`):
+Supports 5 animation modes (`adapter-default`, `wave`, `shimmer`, `pulse`, `none`):
 
 ```html
 <!-- Smooth Wave Sweep Animation -->
@@ -631,7 +656,7 @@ Test consuming components easily in Angular `TestBed`:
 
 ```ts
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { SkeletonHarness } from 'ngx-skeleton';
+import { SkeletonHarness } from 'ngx-skeleton-suite/testing';
 import { MyComponent } from './my.component';
 
 describe('MyComponent', () => {
@@ -675,8 +700,8 @@ describe('MyComponent', () => {
 | `size` | `string` | `undefined` | Square dimension or circle diameter (e.g. `'3rem'`) |
 | `borderRadius` | `string` | `undefined` | Custom border radius (e.g. `'12px'`, `'50%'`) |
 | `count` | `number` | `1` | Number of skeleton items to repeat |
-| `styleClass` | `string` | `undefined` | Custom CSS class(es) passed to `<p-skeleton>` nodes |
-| `animation` | `'prime' \| 'pulse' \| 'shimmer' \| 'wave' \| 'none'` | `'prime'` | Animation engine mode |
+| `styleClass` | `string` | `undefined` | Custom CSS class(es) passed to the rendered skeleton shape |
+| `animation` | `'adapter-default' \| 'pulse' \| 'shimmer' \| 'wave' \| 'none'` | `'adapter-default'` | Animation mode; `adapter-default` delegates to the active renderer |
 | `delay` | `number` | `80` | Delay timer in ms before displaying skeleton |
 | `minimumDuration` | `number` | `200` | Minimum visible duration in ms |
 | `fadeIn` | `boolean \| number` | `180` | Content fade-in transition duration |

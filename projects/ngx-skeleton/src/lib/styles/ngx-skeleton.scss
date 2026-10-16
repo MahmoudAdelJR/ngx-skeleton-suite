@@ -1,23 +1,9 @@
-:root {
-  --ngx-skeleton-base-color: var(--p-content-border-color, #1e293b);
-  --ngx-skeleton-highlight-color: var(--p-content-hover-background, rgba(255, 255, 255, 0.15));
-  --ngx-skeleton-animation-duration: 1.4s;
-  --ngx-skeleton-fade-duration: 180ms;
-}
+/* Core layout host — renderer-agnostic. Individual shapes are styled by the
+   active renderer adapter (native, PrimeNG, Material, ...). */
 
 .ngx-skeleton-host {
   display: block;
   width: 100%;
-
-  .p-skeleton {
-    margin-bottom: 0.5rem;
-    background-color: var(--ngx-skeleton-base-color, #1e293b);
-    border-radius: 6px;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
 }
 
 /* CSS Grid Container Layout */
@@ -50,77 +36,6 @@
   }
 }
 
-/* Custom Animation Modes */
-.ngx-skeleton-pulse .p-skeleton {
-  animation: ngx-skeleton-pulse-anim var(--ngx-skeleton-animation-duration) infinite ease-in-out !important;
-}
-
-@keyframes ngx-skeleton-pulse-anim {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.35;
-  }
-}
-
-.ngx-skeleton-shimmer .p-skeleton {
-  position: relative;
-  overflow: hidden;
-  
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    transform: translateX(-100%);
-    background-image: linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0) 0,
-      rgba(255, 255, 255, 0.15) 20%,
-      rgba(255, 255, 255, 0.3) 60%,
-      rgba(255, 255, 255, 0)
-    );
-    animation: ngx-skeleton-shimmer-anim var(--ngx-skeleton-animation-duration) infinite;
-  }
-}
-
-@keyframes ngx-skeleton-shimmer-anim {
-  100% {
-    transform: translateX(100%);
-  }
-}
-
-.ngx-skeleton-wave .p-skeleton {
-  position: relative;
-  overflow: hidden;
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    transform: translateX(-100%);
-    background-image: linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0) 0,
-      rgba(255, 255, 255, 0.2) 50%,
-      rgba(255, 255, 255, 0) 100%
-    );
-    animation: ngx-skeleton-wave-anim 2s infinite ease-in-out;
-  }
-}
-
-@keyframes ngx-skeleton-wave-anim {
-  100% {
-    transform: translateX(100%);
-  }
-}
-
 /* Content Fade-in Transition */
 .ngx-skeleton-content-enter {
   animation: ngx-skeleton-fade-in var(--ngx-skeleton-fade-duration, 180ms) ease-out both;
@@ -137,20 +52,9 @@
   }
 }
 
-/* Accessibility & Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
-  .ngx-skeleton-pulse .p-skeleton,
-  .ngx-skeleton-shimmer .p-skeleton::after,
-  .ngx-skeleton-wave .p-skeleton::after,
   .ngx-skeleton-content-enter {
     animation: none !important;
     transition: none !important;
-  }
-}
-
-[dir='rtl'] {
-  .ngx-skeleton-shimmer .p-skeleton::after,
-  .ngx-skeleton-wave .p-skeleton::after {
-    animation-direction: reverse;
   }
 }

@@ -12,7 +12,8 @@ import {
   Injector,
   inject,
 } from '@angular/core';
-import { SkeletonHostComponent, SkeletonAnimation } from '../component/skeleton-host.component';
+import { SkeletonHostComponent } from '../component/skeleton-host.component';
+import { SkeletonAnimation } from '../renderer/skeleton-render-model';
 import { SourceNormalizerService, SkeletonLoadingSource } from '../source/source-normalizer.service';
 import { SkeletonContext, SkeletonDataSource, SkeletonReadyStrategy } from './skeleton-context';
 import { NgxSkeletonConfig, NGX_SKELETON_CONFIG, DEFAULT_NGX_SKELETON_CONFIG } from '../config/skeleton-config';
