@@ -12,7 +12,7 @@ description: Authoritative reference table listing all 18 input properties for S
 | `skeletonReadyWhen` | `'non-nullish-emission' \| ((val: T) => boolean)` | `'non-nullish-emission'` | Strategy determining when data is considered ready |
 | `skeletonPreset` | `string \| SkeletonPreset` | `undefined` | Composite built-in preset (`card`, `profile-card`, `avatar`, etc.) |
 | `skeletonGrid` | `SkeletonGridConfig` | `undefined` | Dynamic CSS Grid configuration object |
-| `skeletonAnimation` | `'prime' \| 'pulse' \| 'shimmer' \| 'wave' \| 'none'` | `'prime'` | Animation engine effect |
+| `skeletonAnimation` | `'adapter-default' \| 'pulse' \| 'shimmer' \| 'wave' \| 'none'` | `'adapter-default'` | Animation mode; `adapter-default` delegates to the active renderer |
 | `skeletonWidth` | `string` | `'100%'` | Width of single skeleton placeholder shape |
 | `skeletonHeight` | `string` | `'1rem'` | Height of single skeleton placeholder shape |
 | `skeletonShape` | `'rectangle' \| 'circle'` | `'rectangle'` | Shape of single skeleton placeholder |
@@ -25,3 +25,9 @@ description: Authoritative reference table listing all 18 input properties for S
 | `skeletonPreserveLayout` | `boolean` | `false` | Enables zero-CLS dimension preservation |
 | `skeletonLayoutKey` | `string` | `undefined` | Custom cache key for layout dimension preservation |
 | `skeletonStyleClass` | `string` | `''` | Custom CSS class applied to skeleton container |
+
+:::note[Renderer-agnostic]
+`skeletonAnimation` defaults to `adapter-default`, which delegates to the active renderer
+(native CSS, PrimeNG, or Material). See [Renderer Adapters](/ngx-skeleton-suite/renderer-adapters/) for
+the renderer contract and the neutral `.ngx-skeleton-shape` styling hook.
+:::

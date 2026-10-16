@@ -10,7 +10,7 @@ export default defineConfig({
   integrations: [
     starlight({
       title: 'NGX-SKELETON SUITE',
-      description: 'Zero-CLS Angular Skeleton Loading Library with Composite Presets & CSS Grid Engine.',
+      description: 'Renderer-agnostic Angular skeleton library with native CSS, PrimeNG, and Angular Material adapters, composite presets, and a CSS Grid engine.',
       customCss: ['./src/styles/starlight-custom.css'],
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/MahmoudAdelJR/ngx-skeleton-suite' },
@@ -26,6 +26,7 @@ export default defineConfig({
         {
           label: 'Guides & Customization',
           items: [
+            { label: 'Renderer Adapters', slug: 'renderer-adapters' },
             { label: 'Styling & Custom SCSS', slug: 'styling-and-themes' },
             { label: 'Presets Catalog', slug: 'presets-catalog' },
             { label: 'Responsive CSS Grid', slug: 'responsive-grid' },

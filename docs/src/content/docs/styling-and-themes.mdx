@@ -1,6 +1,6 @@
 ---
 title: Styling & Customization Guide
-description: Complete guide to customizing skeleton styles using CSS Custom Properties, SCSS class overrides, and PrimeNG theme synergy.
+description: Complete guide to customizing skeleton styles using CSS Custom Properties, neutral shape hooks, and renderer adapters.
 ---
 
 ## 1. CSS Custom Properties
@@ -41,16 +41,20 @@ Override dimensions or shapes directly on individual directive instances:
 
 ## 3. SCSS Class Overrides
 
-Target skeleton directive wrappers using custom CSS classes:
+Target skeleton shapes through the renderer-neutral `.ngx-skeleton-shape` hook. This works with
+every adapter (native, PrimeNG, Material):
 
 ```scss
 .custom-card-skeleton {
-  .p-skeleton {
+  .ngx-skeleton-shape {
     background-color: #0a0a0a !important;
     border: 1px solid #ef4444 !important;
   }
 }
 ```
+
+The PrimeNG adapter additionally renders `.p-skeleton`, and the Material adapter renders
+`ngx-skeleton-loader`, so adapter-specific selectors remain available when you need them.
 
 ```html
 <div *skeleton="isLoading; styleClass: 'custom-card-skeleton'">

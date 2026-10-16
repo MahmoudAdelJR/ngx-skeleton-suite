@@ -1,9 +1,9 @@
 ---
 title: NGX-SKELETON SUITE
-description: Zero-CLS Angular Skeleton Loading Library with Composite Presets & CSS Grid Engine.
+description: Renderer-agnostic Angular skeleton library with native CSS, PrimeNG, and Angular Material adapters, composite presets, and a CSS Grid engine.
 template: splash
 hero:
-  tagline: High-performance, zero-CLS skeleton placeholder directive with composite presets, dynamic responsive CSS grids, and RxJS/Signal stream integration.
+  tagline: Renderer-agnostic, zero-CLS skeleton placeholder directive for Angular — native CSS by default, with optional PrimeNG and Angular Material adapters, composite presets, dynamic CSS grids, and RxJS/Signal stream integration.
   image:
     html: '<div style="font-size: 5rem; text-align: center;">⚡</div>'
   actions:
@@ -21,6 +21,9 @@ import { Card, CardGrid } from '@astrojs/starlight/components';
 ## Key Features
 
 <CardGrid stack>
+  <Card title="Renderer Adapters" icon="puzzle">
+    Dependency-free **native CSS** by default. Opt into **PrimeNG** or **Angular Material** renderers, or add your own via the documented `SkeletonRendererComponent` contract.
+  </Card>
   <Card title="Zero-CLS Layout Preservation" icon="star">
     Automatically measures real component bounding boxes before loading and reserves height/width, preventing Cumulative Layout Shift (CLS).
   </Card>
@@ -41,6 +44,27 @@ import { Card, CardGrid } from '@astrojs/starlight/components';
 
 ```bash
 npm install ngx-skeleton-suite
+```
+
+The built-in **native CSS renderer** needs no UI library. To render with a UI framework,
+install its adapter peer and register the provider:
+
+```bash
+# PrimeNG adapter (use the PrimeNG major matching your Angular major)
+npm install primeng
+# Material adapter (community package)
+npm install ngx-skeleton-loader
+```
+
+```typescript
+// app.config.ts
+import { ApplicationConfig } from '@angular/core';
+import { provideNgxSkeleton } from 'ngx-skeleton-suite';
+import { providePrimeNgSkeleton } from 'ngx-skeleton-suite/primeng';
+
+export const appConfig: ApplicationConfig = {
+  providers: [provideNgxSkeleton(), providePrimeNgSkeleton()],
+};
 ```
 
 ```typescript

@@ -11,6 +11,17 @@ Install `ngx-skeleton-suite` from npm using your package manager of choice:
 npm install ngx-skeleton-suite
 ```
 
+The suite ships a **dependency-free native CSS renderer** by default, so no UI library is required.
+If you want to render with PrimeNG or Angular Material, install that adapter's peer as well:
+
+```bash
+# PrimeNG adapter
+npm install primeng
+
+# Material adapter (community package)
+npm install ngx-skeleton-loader
+```
+
 ---
 
 ## 2. Import in Standalone Components
@@ -48,22 +59,54 @@ export class ProfileComponent {
 
 ## 3. Global Configuration Provider (Optional)
 
-Configure default global settings (such as default animation engine, base colors, or flicker delay) at application bootstrap using `provideSkeletonConfig`:
+Configure default global settings (such as the default animation mode or flicker delay) at application bootstrap using `provideNgxSkeleton`:
 
 ```typescript
 // app.config.ts
 import { ApplicationConfig } from '@angular/core';
-import { provideSkeletonConfig } from 'ngx-skeleton-suite';
+import { provideNgxSkeleton } from 'ngx-skeleton-suite';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideSkeletonConfig({
-      animation: 'wave',
-      delay: 80,
-      minimumDuration: 200,
-      baseColor: '#1e293b',
-      highlightColor: 'rgba(255, 255, 255, 0.15)',
+    provideNgxSkeleton({
+      animation: 'adapter-default',
+      delayMs: 80,
+      minimumDurationMs: 200,
+      fadeInMs: 180,
+      preserveLayout: true,
     }),
   ],
 };
 ```
+
+---
+
+## 4. Renderer Adapters (Optional)
+
+By default skeletons are rendered with the built-in native CSS renderer. To render with a UI library,
+register the matching adapter provider. The directive, presets, grids, and animation modes stay identical.
+
+```typescript
+// app.config.ts
+import { ApplicationConfig } from '@angular/core';
+import { provideNgxSkeleton } from 'ngx-skeleton-suite';
+import { providePrimeNgSkeleton } from 'ngx-skeleton-suite/primeng';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideNgxSkeleton(),
+    providePrimeNgSkeleton(), // renders with <p-skeleton>
+  ],
+};
+```
+
+```typescript
+// Material adapter (backed by ngx-skeleton-loader)
+import { provideMaterialSkeleton } from 'ngx-skeleton-suite/material';
+```
+
+| Adapter | Provider | Entry point | Peer dependency |
+| --- | --- | --- | --- |
+| Native CSS (default) | none required | `ngx-skeleton-suite` | — |
+| PrimeNG | `providePrimeNgSkeleton()` | `ngx-skeleton-suite/primeng` | `primeng` |
+| Material | `provideMaterialSkeleton()` | `ngx-skeleton-suite/material` | `ngx-skeleton-loader` |

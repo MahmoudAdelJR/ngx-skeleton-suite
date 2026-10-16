@@ -1,0 +1,133 @@
+---
+title: Renderer Adapters
+description: Choose the native CSS renderer or opt into PrimeNG and Angular Material adapters, and learn how to build your own.
+---
+
+`ngx-skeleton-suite` is renderer-agnostic. The loading orchestration — sources, presets, grids,
+timing, accessibility, and CLS prevention — is identical no matter which renderer you use. Only
+the individual shape element is produced by an adapter.
+
+The default is the **native CSS renderer**, which has **zero UI-library dependencies**.
+
+## Choosing a renderer
+
+| Renderer | Provider | Import from | Peer dependency |
+| --- | --- | --- | --- |
+| Native CSS (default) | none required | `ngx-skeleton-suite` | — |
+| PrimeNG | `providePrimeNgSkeleton()` | `ngx-skeleton-suite/primeng` | `primeng` |
+| Angular Material | `provideMaterialSkeleton()` | `ngx-skeleton-suite/material` | `ngx-skeleton-loader` |
+
+Register exactly one renderer at bootstrap:
+
+```typescript
+// app.config.ts
+import { ApplicationConfig } from '@angular/core';
+import { provideNgxSkeleton } from 'ngx-skeleton-suite';
+import { providePrimeNgSkeleton } from 'ngx-skeleton-suite/primeng';
+// or: import { provideMaterialSkeleton } from 'ngx-skeleton-suite/material';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideNgxSkeleton({ animation: 'adapter-default' }),
+    providePrimeNgSkeleton(),
+  ],
+};
+```
+
+If you register none, the native CSS renderer is used automatically.
+
+## PrimeNG adapter
+
+```bash
+npm install primeng
+```
+
+```typescript
+import { providePrimeNgSkeleton } from 'ngx-skeleton-suite/primeng';
+```
+
+Renders each shape with PrimeNG's `<p-skeleton>`. PrimeNG majors track Angular majors
+(PrimeNG 20 → Angular 20), so install the PrimeNG major that matches your Angular major.
+PrimeNG's own animation is used only for `animation: 'adapter-default'`; for `pulse`,
+`shimmer`, `wave`, and `none` the suite disables PrimeNG's animation and applies its own so
+the two never conflict.
+
+## Angular Material adapter
+
+Angular Material ships no skeleton primitive, so this adapter wraps the community package
+[`ngx-skeleton-loader`](https://www.npmjs.com/package/ngx-skeleton-loader).
+
+```bash
+npm install ngx-skeleton-loader
+```
+
+```typescript
+import { provideMaterialSkeleton } from 'ngx-skeleton-suite/material';
+```
+
+Maps `rectangle` → `appearance="line"`, `circle` → `appearance="circle"`, and forwards
+width/height/size/border-radius to the loader theme. Animation modes are mapped onto the
+loader's own engine: `adapter-default`/`shimmer`/`wave` → `progress`, `pulse` → `pulse`,
+`none` → off.
+
+## Animation modes
+
+| Mode | Behaviour |
+| --- | --- |
+| `adapter-default` | Let the renderer use its native animation (default). |
+| `pulse` | Suite-owned opacity pulse. |
+| `shimmer` | Suite-owned light sweep. |
+| `wave` | Suite-owned wave sweep. |
+| `none` | No animation. |
+
+## Styling hooks
+
+Every renderer applies the same neutral hooks so your CSS is portable across adapters:
+
+- `.ngx-skeleton-shape` — the rendered shape element.
+- `data-ngx-skeleton-shape`, `data-ngx-skeleton-animation` — attributes on the shape.
+- `data-ngx-skeleton-host` — the layout host element.
+
+Use `--ngx-skeleton-base-color`, `--ngx-skeleton-highlight-color`, and
+`--ngx-skeleton-animation-duration` to theme any renderer.
+
+## Writing your own adapter
+
+An adapter is a standalone component whose only requirement is a `model` input bound to a
+`SkeletonRenderModel`:
+
+```typescript
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import {
+  SkeletonRenderModel,
+  SkeletonRendererComponent,
+  NGX_SKELETON_RENDERER,
+} from 'ngx-skeleton-suite';
+
+@Component({
+  selector: 'my-skeleton-shape',
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `<div class="ngx-skeleton-shape" [attr.data-ngx-skeleton-shape]="''"></div>`,
+})
+export class MySkeletonRendererComponent implements SkeletonRendererComponent {
+  readonly model = input.required<SkeletonRenderModel>();
+}
+
+export const provideMySkeleton = () => [
+  { provide: NGX_SKELETON_RENDERER, useValue: MySkeletonRendererComponent },
+];
+```
+
+`SkeletonRenderModel` carries `shape`, `width`, `height`, `size`, `borderRadius`,
+`styleClass`, and `animation`. The core host instantiates your component once per shape and
+binds the model.
+
+## Testing any renderer
+
+```typescript
+import { SkeletonHarness } from 'ngx-skeleton-suite/testing';
+```
+
+The harness queries the renderer-neutral core host, so the same tests work with the native,
+PrimeNG, Material, or a custom renderer.
